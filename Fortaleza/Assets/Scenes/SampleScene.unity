@@ -359,7 +359,7 @@ MonoBehaviour:
   - {fileID: 1330007153}
   - {fileID: 1320177350}
   orderPanel: {fileID: 1325752680}
-  orderInterval: 1
+  orderInterval: 5
 --- !u!4 &689474139
 Transform:
   m_ObjectHideFlags: 0
