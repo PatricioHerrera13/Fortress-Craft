@@ -64,7 +64,7 @@ public class Table : MonoBehaviour
     private Item CraftItem(Item item)
     {
         // Lógica para combinar madera y hierro
-        GameObject newItem = new GameObject("MysticalItem"); // Crear ítem especial
+        GameObject newItem = new GameObject("Mystical"); // Crear ítem especial
         Item craftedItem = newItem.AddComponent<Item>();
         return craftedItem; // Retornar el nuevo ítem
     }
