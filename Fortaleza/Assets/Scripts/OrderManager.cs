@@ -92,4 +92,23 @@ public class OrderManager : MonoBehaviour
             orderTransform.sizeDelta = new Vector2(orderSize, orderSize);
         }
     }
+
+    // Método para eliminar un pedido específico del panel
+    public bool EliminarPedido(Sprite pedido)
+    {
+        // Buscar el pedido en la lista de pedidos activos
+        foreach (Image orderSlot in activeOrders)
+        {
+            if (orderSlot.sprite == pedido)
+            {
+                // Desactivar el pedido encontrado y eliminarlo de la lista
+                orderSlot.gameObject.SetActive(false);
+                activeOrders.Remove(orderSlot);
+                AdjustOrderPositions(); // Reajustar las posiciones de los pedidos restantes
+                return true; // Pedido eliminado con éxito
+            }
+        }
+
+        return false; // El pedido no se encontró
+    }
 }
