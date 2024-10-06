@@ -29,8 +29,28 @@ public class Player : MonoBehaviour
         // Movimiento normal
         if (!isDashing)
         {
-            float moveHorizontal = Input.GetAxis("Horizontal");
-            float moveVertical = Input.GetAxis("Vertical");
+            // Movimiento utilizando las flechas del teclado
+            float moveHorizontal = 0f;
+            float moveVertical = 0f;
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                moveHorizontal = -1f; // Mover hacia la izquierda
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                moveHorizontal = 1f; // Mover hacia la derecha
+            }
+
+            if (Input.GetKey(KeyCode.W))
+            {
+                moveVertical = 1f; // Mover hacia adelante
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                moveVertical = -1f; // Mover hacia atrás
+            }
+
             Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical).normalized * speed;
 
             // Actualizar la velocidad del Rigidbody
@@ -43,6 +63,7 @@ public class Player : MonoBehaviour
             }
         }
     }
+
 
     private System.Collections.IEnumerator Dash(Vector3 direction)
     {

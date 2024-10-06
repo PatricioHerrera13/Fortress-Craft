@@ -350,6 +350,7 @@
 "Assets/Scripts/Menu.cs"
 "Assets/Scripts/PickUpItem.cs"
 "Assets/Scripts/Player.cs"
+"Assets/Scripts/Player2.cs"
 "Assets/Scripts/PlayerInteraction.cs"
 "Assets/Scripts/Table.cs"
 "Assets/TopDown 2D RPG BE3/ReadMe/Scripts/ReadmeBE3.cs"
