@@ -348,10 +348,12 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/Item.cs"
 "Assets/Scripts/Menu.cs"
+"Assets/Scripts/OrderManager.cs"
 "Assets/Scripts/PickUpItem.cs"
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/Player2.cs"
 "Assets/Scripts/PlayerInteraction.cs"
+"Assets/Scripts/PortalDeEntregas.cs"
 "Assets/Scripts/Table.cs"
 "Assets/TopDown 2D RPG BE3/ReadMe/Scripts/ReadmeBE3.cs"
 -langversion:9.0
