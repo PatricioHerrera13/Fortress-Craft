@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638638460367220675
-    m_Hash: 1663762730
+      ticks: 638640305087525068
+    m_Hash: 501356127
   m_LockFileStatus:
     m_FilePath: C:/Users/usuario/Desktop/Proyecto ShadowGear/Fortress-Craft/Fortaleza/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638638460367280684
-    m_Hash: 3509856537
+      ticks: 638640305087535068
+    m_Hash: 2692888496
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
