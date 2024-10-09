@@ -350,6 +350,7 @@
 "Assets/Scripts/Menu.cs"
 "Assets/Scripts/OrderManager.cs"
 "Assets/Scripts/PickUpItem.cs"
+"Assets/Scripts/Player.cs"
 "Assets/Scripts/Player2.cs"
 "Assets/Scripts/PlayerInteraction.cs"
 "Assets/Scripts/PortalDeEntregas.cs"
