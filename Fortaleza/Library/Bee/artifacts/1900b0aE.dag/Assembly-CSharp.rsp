@@ -349,6 +349,7 @@
 "Assets/Scripts/Basurero.cs"
 "Assets/Scripts/Item.cs"
 "Assets/Scripts/Menu.cs"
+"Assets/Scripts/monsterSpawner.cs"
 "Assets/Scripts/OrderManager.cs"
 "Assets/Scripts/PickUpItem.cs"
 "Assets/Scripts/Player.cs"
