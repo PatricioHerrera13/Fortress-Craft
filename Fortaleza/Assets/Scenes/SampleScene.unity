@@ -1428,6 +1428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orderManager: {fileID: 1243410641}
   jugadorCollider: {fileID: 2006434990}
+  jugadorCollider1: {fileID: 535888178}
   itemRequerido: Button Back
 --- !u!1001 &1081428540
 PrefabInstance:

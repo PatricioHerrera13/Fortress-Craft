@@ -5,45 +5,59 @@ public class PortalDeEntregas : MonoBehaviour
 {
     public OrderManager orderManager; // Referencia al script OrderManager
     public Collider jugadorCollider; // Collider del jugador
+    public Collider jugadorCollider1; // Collider del jugador
     public string itemRequerido; // El tipo de ítem que se necesita para entregar el pedido
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        Debug.Log("esta dentro.");
-        // Verificar si el objeto que entra es el jugador
-        if (other == jugadorCollider)
+        // Verificar si el objeto que está dentro del trigger es el jugador
+        if (other == jugadorCollider || other == jugadorCollider1)
         {
-            Debug.Log("El jugador se detecta.");
-            PickUpItem playerPickUp = other.GetComponentInChildren<PickUpItem>();
-
-            // Verificar si el jugador sostiene un ítem y si ese ítem es el requerido
-            if (playerPickUp != null && !string.IsNullOrEmpty(playerPickUp.GetPickedItemType()))
+            // Comprobar si el jugador presiona la tecla 'E'
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                string tipoItemJugador = playerPickUp.GetPickedItemType();
-                Debug.Log(tipoItemJugador);
-                
-                if (tipoItemJugador == itemRequerido)
+                Debug.Log("El jugador presionó E.");
+                PickUpItem playerPickUp = other.GetComponentInChildren<PickUpItem>();
+
+                // Verificar si el jugador sostiene un ítem y si ese ítem es el requerido
+                if (playerPickUp != null && !string.IsNullOrEmpty(playerPickUp.GetPickedItemType()))
                 {
-                    // El ítem es el correcto, eliminarlo del OrderManager
-                    Sprite pedidoSprite = BuscarPedidoSprite(itemRequerido);
+                    string tipoItemJugador = playerPickUp.GetPickedItemType();
+                    Debug.Log(tipoItemJugador);
 
-                    if (pedidoSprite != null && orderManager.EliminarPedido(pedidoSprite))
+                    if (tipoItemJugador == itemRequerido)
                     {
-                        // Eliminar el pedido de las manos del jugador
-                        playerPickUp.GetComponent<PickUpItem>().pickedItemType = null;
+                        // El ítem es el correcto, eliminarlo del OrderManager
+                        Sprite pedidoSprite = BuscarPedidoSprite(itemRequerido);
 
-                        // Sumar un punto al jugador (por ahora con un Debug)
-                        Debug.Log("¡Pedido entregado! Punto sumado.");
+                        if (pedidoSprite != null && orderManager.EliminarPedido(pedidoSprite))
+                        {
+                            // Eliminar el ítem del "HandPoint" del jugador
+                            Transform hand = other.transform.Find("Hand/HandPoint");
+                            if (hand != null && hand.childCount > 0)
+                            {
+                                // Destruir el objeto que se sostiene
+                                GameObject objetoSostenido = hand.GetChild(0).gameObject;
+                                Destroy(objetoSostenido);
+                                Debug.Log("El objeto ha sido eliminado del jugador.");
+                            }
+
+                            // Eliminar el tipo de ítem de las manos del jugador
+                            playerPickUp.pickedItemType = null;
+
+                            // Sumar un punto al jugador (por ahora con un Debug)
+                            Debug.Log("¡Pedido entregado! Punto sumado.");
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("El jugador no sostiene el ítem correcto.");
                     }
                 }
                 else
                 {
-                    Debug.Log("El jugador no sostiene el ítem correcto.");
+                    Debug.Log("El jugador no sostiene ningún ítem.");
                 }
-            }
-            else
-            {
-                Debug.Log("El jugador no sostiene ningún ítem.");
             }
         }
     }
