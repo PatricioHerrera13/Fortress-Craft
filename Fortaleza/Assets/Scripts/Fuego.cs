@@ -5,11 +5,11 @@ using UnityEngine;
 public class Fuego : MonoBehaviour
 {
     public GameObject firePrefab; // El prefab del fuego
-    public float minTime = 10f; // Tiempo mínimo de expansión
-    public float maxTime = 30f; // Tiempo máximo de expansión
+    public float minTime = 2f; // Tiempo mínimo de expansión
+    public float maxTime = 5f; // Tiempo máximo de expansión
     public float spreadDistance = 1.5f; // Distancia a la que se generarán las copias
     public static int currentFireCount = 0; // Contador estático para instancias de fuego
-    public static int maxFireCount = 10; // Número máximo de instancias permitidas
+    public static int maxFireCount = 30; // Número máximo de instancias permitidas
 
     private float nextSpreadTime;
     private float creationTime; // Hora de creación para cada fuego
@@ -17,10 +17,15 @@ public class Fuego : MonoBehaviour
     private Vector3 lastDirection = Vector3.zero; // Dirección de la última expansión
     private bool isRestarting = false; // Evitar múltiples reinicios simultáneos
 
-    void Start()
+    private MeshCollider meshCollider; // Referencia al MeshCollider
+
+    public void Start()
     {
         // Hora de creación del fuego
         creationTime = Time.time;
+
+        // Obtén el MeshCollider del objeto padre FireSpawner
+        meshCollider = FindObjectOfType<FireSpawner>().GetComponent<MeshCollider>();
 
         // Cada fuego tendrá un tiempo de expansión individual entre minTime y maxTime
         nextSpreadTime = creationTime + Random.Range(minTime, maxTime);
@@ -38,11 +43,11 @@ public class Fuego : MonoBehaviour
         // Si no quedan fuegos en la escena y no estamos reiniciando ya, empezar la corrutina para reiniciar
         if (!isRestarting && GameObject.FindGameObjectsWithTag("Fuego").Length == 0)
         {
-            StartCoroutine(RestartFireAfterDelay(20f)); // Espera 40 segundos antes de reiniciar
+            StartCoroutine(RestartFireAfterDelay(20f)); // Espera 20 segundos antes de reiniciar
         }
     }
 
-    void SpreadFire()
+    public void SpreadFire()
     {
         // Solo crear una nueva instancia si no hemos alcanzado el máximo permitido
         if (currentFireCount < maxFireCount)
@@ -63,45 +68,62 @@ public class Fuego : MonoBehaviour
                 possibleDirections.Remove(oppositeDirection);
             }
 
-            // Elegir una nueva dirección aleatoria de las posibles
-            Vector3 chosenDirection = possibleDirections[Random.Range(0, possibleDirections.Count)];
-
-            // Verificar si la nueva posición ya tiene un fuego
-            Vector3 newPosition = new Vector3(transform.position.x + chosenDirection.x, transform.position.y, transform.position.z + chosenDirection.z);
-            Collider[] hitColliders = Physics.OverlapSphere(newPosition, 0.1f); // Radio pequeño para detectar colisiones
-            bool positionOccupied = false;
-
-            foreach (Collider hitCollider in hitColliders)
+            // Intentar encontrar una posición válida
+            for (int i = 0; i < 40; i++) // Intentar 20 veces
             {
-                if (hitCollider.gameObject.CompareTag("Fuego")) // Asegúrate de asignar la etiqueta "Fuego" a todos los fuegos
-                {
-                    positionOccupied = true;
-                    break;
-                }
-            }
+                // Elegir una nueva dirección aleatoria de las posibles
+                Vector3 chosenDirection = possibleDirections[Random.Range(0, possibleDirections.Count)];
 
-            // Solo instanciar el nuevo fuego si la posición no está ocupada
-            if (!positionOccupied)
-            {
-                GameObject newFire = Instantiate(firePrefab, newPosition, Quaternion.identity);
+                // Verificar la nueva posición
+                Vector3 newPosition = new Vector3(transform.position.x + chosenDirection.x, transform.position.y, transform.position.z + chosenDirection.z);
 
-                // Asegúrate de que el nuevo fuego tenga asignado el mismo prefab
-                Fuego newFireScript = newFire.GetComponent<Fuego>();
-                if (newFireScript != null)
+                // Comprobar si la nueva posición está dentro del Mesh Collider
+                if (IsPositionInsideMeshCollider(newPosition))
                 {
-                    newFireScript.firePrefab = firePrefab; // Asignar el prefab
-                    currentFireCount++; // Incrementar el contador de instancias
-                    newFireScript.lastDirection = chosenDirection; // Registrar la dirección de expansión
+                    // Verificar si la nueva posición ya tiene un fuego
+                    Collider[] hitColliders = Physics.OverlapSphere(newPosition, 0.1f); // Radio pequeño para detectar colisiones
+                    bool positionOccupied = false;
+
+                    foreach (Collider hitCollider in hitColliders)
+                    {
+                        if (hitCollider.gameObject.CompareTag("Fuego")) // Asegúrate de asignar la etiqueta "Fuego" a todos los fuegos
+                        {
+                            positionOccupied = true;
+                            break;
+                        }
+                    }
+
+                    // Solo instanciar el nuevo fuego si la posición no está ocupada
+                    if (!positionOccupied)
+                    {
+                        GameObject newFire = Instantiate(firePrefab, newPosition, Quaternion.identity);
+
+                        // Asegúrate de que el nuevo fuego tenga asignado el mismo prefab
+                        Fuego newFireScript = newFire.GetComponent<Fuego>();
+                        if (newFireScript != null)
+                        {
+                            newFireScript.firePrefab = firePrefab; // Asignar el prefab
+                            currentFireCount++; // Incrementar el contador de instancias
+                            newFireScript.lastDirection = chosenDirection; // Registrar la dirección de expansión
+                        }
+                        else
+                        {
+                            Debug.LogError("El prefab de fuego no tiene el script Fuego asignado.");
+                        }
+                        return; // Salir si se generó exitosamente
+                    }
+                    else
+                    {
+                        Debug.Log("La posición ya está ocupada, intentando otra vez.");
+                    }
                 }
                 else
                 {
-                    Debug.LogError("El prefab de fuego no tiene el script Fuego asignado.");
+                    Debug.Log("La nueva posición está fuera del Mesh Collider, intentando otra vez.");
                 }
             }
-            else
-            {
-                Debug.Log("La posición ya está ocupada, no se generó un nuevo fuego.");
-            }
+
+            Debug.Log("No se pudo generar un nuevo fuego después de múltiples intentos.");
         }
         else
         {
@@ -109,11 +131,17 @@ public class Fuego : MonoBehaviour
         }
     }
 
-    IEnumerator RestartFireAfterDelay(float delay)
+    private bool IsPositionInsideMeshCollider(Vector3 position)
+    {
+        // Comprobar si la posición está dentro del MeshCollider
+        return meshCollider.bounds.Contains(position);
+    }
+
+    private IEnumerator RestartFireAfterDelay(float delay)
     {
         isRestarting = true; // Evitar que se llame a la corrutina varias veces
         Debug.Log("Esperando " + delay + " segundos antes de reiniciar...");
-        yield return new WaitForSeconds(delay); // Esperar 40 segundos
+        yield return new WaitForSeconds(delay); // Esperar el tiempo especificado
 
         // Verificar nuevamente si no hay fuegos antes de reiniciar
         if (GameObject.FindGameObjectsWithTag("Fuego").Length == 0)
@@ -123,7 +151,7 @@ public class Fuego : MonoBehaviour
         isRestarting = false;
     }
 
-    void RestartFire()
+    private void RestartFire()
     {
         Debug.Log("No quedan más fuegos en la escena. Reiniciando el proceso...");
         hasSpread = false; // Resetear el estado de expansión

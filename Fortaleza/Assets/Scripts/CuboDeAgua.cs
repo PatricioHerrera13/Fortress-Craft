@@ -4,16 +4,62 @@ using UnityEngine;
 
 public class CuboDeAgua : MonoBehaviour
 {
-    // Este script debe estar en el cubo de agua
+    public int maxUsos = 2; // Cantidad máxima de fuegos que puede apagar
+    private int usosRestantes;
+    private bool puedeApagar = true; // Controla si el cubo puede seguir apagando fuegos
+    private Collider fuegoEnContacto; // Guarda referencia al fuego con el que el cubo está en contacto
+
+    void Start()
+    {
+        // Inicializamos los usos restantes al máximo
+        usosRestantes = maxUsos;
+    }
 
     void OnTriggerEnter(Collider other)
     {
-        // Comprobar si el objeto que entra en el trigger es un fuego
+        // Detectamos si el cubo entra en contacto con un fuego
+        if (other.CompareTag("Fuego") && puedeApagar)
+        {
+            // Guardamos el fuego con el que estamos en contacto
+            fuegoEnContacto = other;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        // Si el cubo sale del área de colisión del fuego, eliminamos la referencia
         if (other.CompareTag("Fuego"))
         {
-            // Destruir el objeto de fuego
-            Destroy(other.gameObject);
-            Debug.Log("Fuego destruido por el cubo de agua.");
+            fuegoEnContacto = null;
         }
+    }
+
+    void Update()
+    {
+        // Comprobar si el jugador presiona "T" y hay un fuego en contacto
+        if (Input.GetKeyDown(KeyCode.T) && fuegoEnContacto != null && puedeApagar)
+        {
+            // Apagamos el fuego
+            Destroy(fuegoEnContacto.gameObject);
+            fuegoEnContacto = null; // Reseteamos la referencia después de destruir el fuego
+
+            // Reduce los usos restantes
+            usosRestantes--;
+
+            // Si ya no tiene más usos, desactivar la capacidad de apagar fuegos
+            if (usosRestantes <= 0)
+            {
+                puedeApagar = false;
+                Debug.Log("El cubo ya no tiene más usos. Debes recargarlo.");
+            }
+        }
+    }
+
+    // Método que recarga el cubo cuando interactúa con el pozo
+    public void RecargarCubo()
+    {
+        usosRestantes = maxUsos;
+        puedeApagar = true;
+        Debug.Log("El cubo ha sido recargado.");
     }
 }
