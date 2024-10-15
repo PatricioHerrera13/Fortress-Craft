@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnerFuego : MonoBehaviour
+public class FireSpawner : MonoBehaviour
 {
     public GameObject firePrefab; // Prefab del fuego
     public float spreadDistance = 1.5f; // Distancia a la que se generarán las copias
