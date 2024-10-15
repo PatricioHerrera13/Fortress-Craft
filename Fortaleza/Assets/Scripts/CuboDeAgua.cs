@@ -39,18 +39,22 @@ public class CuboDeAgua : MonoBehaviour
         // Comprobar si el jugador presiona "T" y hay un fuego en contacto
         if (Input.GetKeyDown(KeyCode.T) && fuegoEnContacto != null && puedeApagar)
         {
-            // Apagamos el fuego
-            Destroy(fuegoEnContacto.gameObject);
-            fuegoEnContacto = null; // Reseteamos la referencia después de destruir el fuego
-
-            // Reduce los usos restantes
-            usosRestantes--;
-
-            // Si ya no tiene más usos, desactivar la capacidad de apagar fuegos
-            if (usosRestantes <= 0)
+            // Obtén el script de fuego y llama al método DestroyFire
+            Fuego fuego = fuegoEnContacto.GetComponent<Fuego>();
+            if (fuego != null)
             {
-                puedeApagar = false;
-                Debug.Log("El cubo ya no tiene más usos. Debes recargarlo.");
+                fuego.DestroyFire(); // Llama al método para destruir el fuego
+                fuegoEnContacto = null; // Reseteamos la referencia después de destruir el fuego
+
+                // Reduce los usos restantes
+                usosRestantes--;
+
+                // Si ya no tiene más usos, desactivar la capacidad de apagar fuegos
+                if (usosRestantes <= 0)
+                {
+                    puedeApagar = false;
+                    Debug.Log("El cubo ya no tiene más usos. Debes recargarlo.");
+                }
             }
         }
     }

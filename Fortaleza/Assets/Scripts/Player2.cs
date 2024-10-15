@@ -8,6 +8,7 @@ public class Player2 : MonoBehaviour
     public float dashSpeed = 50f; // Velocidad del dash
     public float dashDuration = 0.2f; // Duración del dash
     public float dashCooldown = 1f; // Tiempo de espera entre dashes
+    public Transform hand; // Asigna el transform de la mano desde el inspector
 
     private Rigidbody rb;
     private bool isDashing = false;
@@ -56,6 +57,13 @@ public class Player2 : MonoBehaviour
             // Actualizar la velocidad del Rigidbody
             rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
 
+            // Ajustar la dirección del collider en la mano
+            if (movement != Vector3.zero)
+            {
+                // Asegúrate de que el collider esté orientado correctamente
+                hand.localRotation = Quaternion.LookRotation(-movement);
+            }
+
             // Dash
             if (Input.GetKeyDown(KeyCode.L) && dashCooldownTimer <= 0)
             {
@@ -63,7 +71,6 @@ public class Player2 : MonoBehaviour
             }
         }
     }
-
 
     private System.Collections.IEnumerator Dash(Vector3 direction)
     {

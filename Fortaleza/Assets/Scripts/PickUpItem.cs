@@ -7,42 +7,61 @@ public class PickUpItem : MonoBehaviour
     public GameObject HandPoint;
     private GameObject pickedItem = null;
 
-    // Nueva variable para guardar el tipo del ítem que el jugador tiene
     public string pickedItemType = "";
+    public float throwForce = 15f;
+    public float throwAngle = 45f;
 
-    // Variables para el lanzamiento
-    public float throwForce = 15f; // Fuerza del lanzamiento
-    public float throwAngle = 45f; // Ángulo del lanzamiento
-
-    // Variables para la dirección de movimiento del jugador
     private Vector3 lastMoveDirection = Vector3.zero;
     private Vector3 lastPosition = Vector3.zero;
 
+    public float HoldTime = 2;
+    private bool StartTimer;
+
     void Update()
     {
-        // Detectar el movimiento del jugador
         DetectMovement();
 
-        // Soltar el objeto con la tecla 'R'
-        if (pickedItem != null)
+        if (Input.GetKeyDown(KeyCode.T))
         {
-            if (Input.GetKey("r"))
+            if (pickedItem == null)
             {
-                ReleaseItem();
+                TryPickUpItem();
             }
+            else
+            {
+                StartTimer = true;
+                StartCoroutine(HoldTimer());
+            }
+        }
 
-            // Lanzar el objeto con la tecla 'H'
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                ThrowItem();
-            }
+        if (Input.GetKeyUp(KeyCode.T))
+        {
+            StartTimer = false;
+        }
+
+        if (pickedItem != null && Input.GetKey("e"))
+        {
+            ReleaseItem();
         }
     }
 
-    // Método para capturar la dirección del movimiento del jugador
+    IEnumerator HoldTimer()
+    {
+        Debug.Log("Empezó Timer!");
+        yield return new WaitForSeconds(HoldTime);
+        if (!StartTimer)
+        {
+            Debug.Log("No se pudo");
+        }
+        else
+        {
+            Debug.Log("Lanzamiento!");
+            ThrowItem();
+        }
+    }
+
     private void DetectMovement()
     {
-        // Si el jugador se ha movido desde la última posición, actualizamos la dirección de movimiento
         if (transform.position != lastPosition)
         {
             lastMoveDirection = (transform.position - lastPosition).normalized;
@@ -50,68 +69,64 @@ public class PickUpItem : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void TryPickUpItem()
     {
-        if (other.gameObject.CompareTag("Item"))
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 1f);
+        foreach (Collider other in colliders)
         {
-            if (Input.GetKey("e") && pickedItem == null)
+            if (other.CompareTag("Item"))
             {
-                other.GetComponent<Rigidbody>().useGravity = false;
-                other.GetComponent<Rigidbody>().isKinematic = true;
-                other.transform.position = HandPoint.transform.position;
-                other.gameObject.transform.SetParent(HandPoint.gameObject.transform);
+                Item itemComponent = other.GetComponent<Item>();
+                if (itemComponent != null)
+                {
+                    other.GetComponent<Rigidbody>().useGravity = false;
+                    other.GetComponent<Rigidbody>().isKinematic = true;
+                    other.transform.position = HandPoint.transform.position;
+                    other.gameObject.transform.SetParent(HandPoint.transform);
 
-                pickedItem = other.gameObject;
-                pickedItemType = other.gameObject.GetComponent<Item>().itemType;  // Guarda el tipo del ítem
+                    pickedItem = other.gameObject;
+                    pickedItemType = itemComponent.itemType;
+                    break;
+                }
             }
         }
     }
 
-    // Método para soltar el ítem
     private void ReleaseItem()
     {
-        pickedItem.GetComponent<Rigidbody>().useGravity = true;
-        pickedItem.GetComponent<Rigidbody>().isKinematic = false;
-        pickedItem.transform.SetParent(null);
-        pickedItemType = "";  // Resetea el tipo de ítem
-        pickedItem = null;
+        if (pickedItem != null)
+        {
+            pickedItem.GetComponent<Rigidbody>().useGravity = true;
+            pickedItem.GetComponent<Rigidbody>().isKinematic = false;
+            pickedItem.transform.SetParent(null);
+            pickedItemType = "";
+            pickedItem = null;
+        }
     }
 
-    // Método para lanzar el ítem en la dirección en la que el jugador se movía
     private void ThrowItem()
     {
         if (pickedItem != null)
         {
-            // Desanclar el objeto
             pickedItem.transform.SetParent(null);
-
-            // Hacer que el objeto sea afectado por la física
             Rigidbody itemRb = pickedItem.GetComponent<Rigidbody>();
             itemRb.useGravity = true;
             itemRb.isKinematic = false;
 
-            // Verificar si el jugador se ha movido
             Vector3 throwDirection = lastMoveDirection;
-
             if (throwDirection == Vector3.zero)
             {
-                // Si el jugador no se movía, lanzar hacia adelante
                 throwDirection = transform.forward;
             }
 
-            // Agregar un componente vertical para el lanzamiento parabólico
             throwDirection = (throwDirection + Vector3.up * Mathf.Tan(throwAngle * Mathf.Deg2Rad)).normalized;
-
-            // Aplicar fuerza al objeto para lanzarlo
             itemRb.AddForce(throwDirection * throwForce, ForceMode.VelocityChange);
 
-            // Limpiar la referencia al ítem
             pickedItem = null;
             pickedItemType = "";
         }
     }
 
-    // Método para obtener el tipo de ítem que el jugador tiene en manos
     public string GetPickedItemType()
     {
         return pickedItemType;

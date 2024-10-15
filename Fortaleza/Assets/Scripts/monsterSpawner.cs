@@ -7,15 +7,16 @@ public class monsterSpawner : MonoBehaviour
     [System.Serializable]
     public class WaveContent
     {
-        [SerializeField][NonReorderable] GameObject[] monsterSpawner;  // Es un array de GameObjects
+        [SerializeField][NonReorderable] GameObject[] monsterSpawner;
 
-        public GameObject[] GetMonsterSpawnList()  // Debe retornar el array de GameObject
+        public GameObject[] GetMonsterSpawnList()
         {
             return monsterSpawner;
         }
     }
 
-    [SerializeField][NonReorderable] WaveContent[] waves;  // Es un array de WaveContent
+    [SerializeField][NonReorderable] WaveContent[] waves;
+    [SerializeField] Transform[] patrolPoints; // Añadido para almacenar los puntos de patrullaje
     int currentWave = 0;
     float SpawRange = 10;
 
@@ -31,11 +32,16 @@ public class monsterSpawner : MonoBehaviour
 
     void SpawnWave()
     {
-        GameObject[] monsters = waves[currentWave].GetMonsterSpawnList();  // Obtener el array de monstruos
+        GameObject[] monsters = waves[currentWave].GetMonsterSpawnList();
 
         for (int i = 0; i < monsters.Length; i++)
         {
-            Instantiate(monsters[i], FindSpawnLoc(), Quaternion.identity);
+            GameObject monster = Instantiate(monsters[i], FindSpawnLoc(), Quaternion.identity);
+            Minion minion = monster.GetComponent<Minion>(); // Obtiene el script Minion del enemigo instanciado
+            if (minion != null)
+            {
+                minion.patrolPoints = patrolPoints; // Asigna los puntos de patrullaje al enemigo
+            }
         }
     }
 

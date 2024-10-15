@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -12,6 +11,9 @@ public class Player : MonoBehaviour
     private Rigidbody rb;
     private bool isDashing = false;
     private float dashCooldownTimer = 0f;
+    private Vector3 lastMovementDirection; // Guardar la última dirección de movimiento
+
+    public Transform hand; // Referencia al objeto Hand
 
     private void Awake()
     {
@@ -51,21 +53,32 @@ public class Player : MonoBehaviour
                 moveVertical = -1f; // Mover hacia atrás
             }
 
-            Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical).normalized * speed;
+            Vector3 movement = new Vector3(moveHorizontal, 0, moveVertical).normalized;
 
-            // Actualizar la velocidad del Rigidbody
-            rb.velocity = new Vector3(movement.x, rb.velocity.y, movement.z);
+            // Guarda la última dirección de movimiento válida
+            if (movement.magnitude > 0)
+            {
+                lastMovementDirection = movement;
+            }
+
+            // Limita la velocidad en diagonal para evitar que el jugador se mueva más rápido
+            rb.velocity = Vector3.ClampMagnitude(movement * speed, speed);
+
+            // Actualiza la rotación de Hand en función de la dirección de movimiento, invertida
+            if (movement != Vector3.zero)
+            {
+                hand.rotation = Quaternion.LookRotation(-movement); // Invertir la dirección de movimiento
+            }
 
             // Dash
-            if (Input.GetKeyDown(KeyCode.F) && dashCooldownTimer <= 0)
+            if (Input.GetKeyDown(KeyCode.U) && dashCooldownTimer <= 0)
             {
-                StartCoroutine(Dash(movement));
+                StartCoroutine(Dash(lastMovementDirection));
             }
         }
     }
 
-
-    private System.Collections.IEnumerator Dash(Vector3 direction)
+    private IEnumerator Dash(Vector3 direction)
     {
         isDashing = true;
 

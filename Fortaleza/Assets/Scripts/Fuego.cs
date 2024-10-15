@@ -16,7 +16,7 @@ public class Fuego : MonoBehaviour
     private bool hasSpread = false; // Estado para verificar si ya se ha expandido
     private Vector3 lastDirection = Vector3.zero; // Dirección de la última expansión
     private bool isRestarting = false; // Evitar múltiples reinicios simultáneos
-    private bool isDestroyed = false; // Variable para controlar si el fuego ha sido destruido
+    private bool isDestroyed = false; // Estado para verificar si el fuego ha sido destruido
 
     private MeshCollider meshCollider; // Referencia al MeshCollider
 
@@ -34,9 +34,6 @@ public class Fuego : MonoBehaviour
 
     void Update()
     {
-        // Comprobar si el fuego ha sido destruido, si es así, no hacer nada
-        if (isDestroyed) return;
-
         // Comprobar si es el momento de expandirse y no se ha expandido aún
         if (!hasSpread && Time.time >= nextSpreadTime)
         {
@@ -59,6 +56,13 @@ public class Fuego : MonoBehaviour
         // Solo crear una nueva instancia si no hemos alcanzado el máximo permitido
         if (currentFireCount < maxFireCount)
         {
+            // Verificar que firePrefab no sea nulo
+            if (firePrefab == null)
+            {
+                Debug.LogError("firePrefab es nulo. Asegúrate de asignar un prefab válido en el inspector.");
+                return; // Salir si no hay un prefab válido
+            }
+
             // Elegir una dirección aleatoria para expandirse, excepto la contraria a la última
             List<Vector3> possibleDirections = new List<Vector3>
             {
@@ -144,15 +148,6 @@ public class Fuego : MonoBehaviour
         return meshCollider.bounds.Contains(position);
     }
 
-    public void DestroyFire()
-    {
-        // Marcar el fuego como destruido
-        isDestroyed = true;
-
-        // Destruir el objeto del fuego
-        Destroy(gameObject);
-    }
-
     private IEnumerator RestartFireAfterDelay(float delay)
     {
         isRestarting = true; // Evitar que se llame a la corrutina varias veces
@@ -175,5 +170,13 @@ public class Fuego : MonoBehaviour
 
         // Reiniciar el tiempo de expansión para el próximo fuego
         nextSpreadTime = Time.time + Random.Range(minTime, maxTime);
+    }
+
+    // Método para marcar el fuego como destruido
+    public void DestroyFire()
+    {
+        isDestroyed = true; // Marcar el fuego como destruido
+        currentFireCount--; // Decrementar el contador de instancias
+        Destroy(gameObject); // Destruir el objeto de fuego
     }
 }

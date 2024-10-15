@@ -196,13 +196,48 @@ MonoBehaviour:
   m_GameObject: {fileID: 6289427}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 860f91c766453654aaf98e45890e2067, type: 3}
+  m_Script: {fileID: 11500000, guid: 648f3ca4f0e9d8741810ef2016e06b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   HandPoint: {fileID: 1238705344}
   pickedItemType: 
   throwForce: 15
   throwAngle: 45
+  HoldTime: 2
+--- !u!1 &30786094
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 30786095}
+  m_Layer: 0
+  m_Name: PatrolPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &30786095
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30786094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.275, y: 7.692, z: -6.9915423}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 702039759}
+  - {fileID: 690388129}
+  - {fileID: 125240667}
+  m_Father: {fileID: 0}
+  m_RootOrder: 22
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &46489651
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,6 +591,37 @@ MonoBehaviour:
   firePrefab: {fileID: 7817514592086525795, guid: f7122ed1d3c1b614f98d5500908653cf, type: 3}
   spreadDistance: 1.5
   fireSpawnArea: {fileID: 112455852}
+--- !u!1 &125240666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 125240667}
+  m_Layer: 0
+  m_Name: PatrolPoint3
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &125240667
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 125240666}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.68, y: -3.82, z: 9.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 30786095}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &126905214
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,8 +1213,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 0.09581375}
-  m_Center: {x: 0, y: 0, z: 0.01484807}
+  m_Size: {x: 0.44348264, y: 0.75948954, z: 0.09581375}
+  m_Center: {x: -0.010211895, y: -0.12025555, z: 0.014848074}
 --- !u!135 &535888178
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1247,6 +1313,7 @@ MonoBehaviour:
   dashSpeed: 50
   dashDuration: 0.2
   dashCooldown: 1
+  hand: {fileID: 6289428}
 --- !u!1 &552898448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,6 +1390,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &690388128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 690388129}
+  m_Layer: 0
+  m_Name: PatrolPoint2
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &690388129
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690388128}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -16.24, y: -3.82, z: 11.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 30786095}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &699782261
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,6 +1518,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 699782261}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &702039758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 702039759}
+  m_Layer: 0
+  m_Name: PatrolPoint1
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &702039759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702039758}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5, y: -3.82, z: 11.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 30786095}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1788,6 +1917,7 @@ MonoBehaviour:
   pickedItemType: 
   throwForce: 15
   throwAngle: 45
+  HoldTime: 2
 --- !u!1 &857158670 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8568948079326307115, guid: 682e7292aebd7ab4c8cb299e23631756, type: 3}
@@ -2525,6 +2655,7 @@ GameObject:
   - component: {fileID: 1106430905}
   - component: {fileID: 1106430904}
   - component: {fileID: 1106430903}
+  - component: {fileID: 1106430909}
   m_Layer: 0
   m_Name: Cubo
   m_TagString: Item
@@ -2654,6 +2785,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1106430909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106430902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 843320eefd5d98b459e6e70fb82d0142, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemType: Cubo
 --- !u!1 &1238705344
 GameObject:
   m_ObjectHideFlags: 0
@@ -2678,7 +2822,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1238705344}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.58}
+  m_LocalPosition: {x: 0, y: 0, z: -0.804}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3143,7 +3287,7 @@ GameObject:
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1483783892
 Transform:
   m_ObjectHideFlags: 0
@@ -3152,7 +3296,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1483783890}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.89, y: 1.6819642, z: -11.77}
+  m_LocalPosition: {x: 10.89, y: 1.6819642, z: 12.55}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3173,10 +3317,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waves:
   - monsterSpawner:
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: 7111780891751461961, guid: afc5692ead785264294775f70f0a01b9, type: 3}
+    - {fileID: 7111780891751461961, guid: afc5692ead785264294775f70f0a01b9, type: 3}
   - monsterSpawner: []
   - monsterSpawner: []
+  patrolPoints:
+  - {fileID: 702039759}
+  - {fileID: 690388129}
+  - {fileID: 125240667}
 --- !u!1 &1556316581
 GameObject:
   m_ObjectHideFlags: 0
@@ -4297,14 +4445,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1954334939}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.464}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: -0.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 821033776}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &2006434983
 GameObject:
   m_ObjectHideFlags: 0
@@ -4420,8 +4568,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 0.09581375}
-  m_Center: {x: 0, y: 0, z: 0.014848074}
+  m_Size: {x: 0.49354935, y: 0.8219962, z: 0.09581375}
+  m_Center: {x: -0.015461127, y: -0.0890023, z: 0.014848074}
 --- !u!54 &2006434992
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4469,6 +4617,7 @@ MonoBehaviour:
   dashSpeed: 50
   dashDuration: 0.2
   dashCooldown: 1
+  hand: {fileID: 821033776}
 --- !u!1 &2017723772
 GameObject:
   m_ObjectHideFlags: 0
