@@ -16,6 +16,7 @@ public class Fuego : MonoBehaviour
     private bool hasSpread = false; // Estado para verificar si ya se ha expandido
     private Vector3 lastDirection = Vector3.zero; // Dirección de la última expansión
     private bool isRestarting = false; // Evitar múltiples reinicios simultáneos
+    private bool isDestroyed = false; // Variable para controlar si el fuego ha sido destruido
 
     private MeshCollider meshCollider; // Referencia al MeshCollider
 
@@ -33,6 +34,9 @@ public class Fuego : MonoBehaviour
 
     void Update()
     {
+        // Comprobar si el fuego ha sido destruido, si es así, no hacer nada
+        if (isDestroyed) return;
+
         // Comprobar si es el momento de expandirse y no se ha expandido aún
         if (!hasSpread && Time.time >= nextSpreadTime)
         {
@@ -49,6 +53,9 @@ public class Fuego : MonoBehaviour
 
     public void SpreadFire()
     {
+        // Si el fuego ha sido destruido, no continuar con la expansión
+        if (isDestroyed) return;
+
         // Solo crear una nueva instancia si no hemos alcanzado el máximo permitido
         if (currentFireCount < maxFireCount)
         {
@@ -69,7 +76,7 @@ public class Fuego : MonoBehaviour
             }
 
             // Intentar encontrar una posición válida
-            for (int i = 0; i < 40; i++) // Intentar 20 veces
+            for (int i = 0; i < 40; i++) // Intentar 40 veces
             {
                 // Elegir una nueva dirección aleatoria de las posibles
                 Vector3 chosenDirection = possibleDirections[Random.Range(0, possibleDirections.Count)];
@@ -135,6 +142,15 @@ public class Fuego : MonoBehaviour
     {
         // Comprobar si la posición está dentro del MeshCollider
         return meshCollider.bounds.Contains(position);
+    }
+
+    public void DestroyFire()
+    {
+        // Marcar el fuego como destruido
+        isDestroyed = true;
+
+        // Destruir el objeto del fuego
+        Destroy(gameObject);
     }
 
     private IEnumerator RestartFireAfterDelay(float delay)
