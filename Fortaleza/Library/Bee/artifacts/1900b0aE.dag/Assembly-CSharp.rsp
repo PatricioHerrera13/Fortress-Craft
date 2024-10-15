@@ -361,9 +361,11 @@
 "Assets/Scripts/Player.cs"
 "Assets/Scripts/Player2.cs"
 "Assets/Scripts/PlayerInteraction.cs"
+"Assets/Scripts/PointerController.cs"
 "Assets/Scripts/PortalDeEntregas.cs"
 "Assets/Scripts/PozoDeAgua.cs"
 "Assets/Scripts/Table.cs"
+"Assets/Scripts/TanqueComb.cs"
 -langversion:9.0
 
 /deterministic
