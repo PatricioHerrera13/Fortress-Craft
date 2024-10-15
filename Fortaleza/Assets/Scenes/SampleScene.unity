@@ -203,7 +203,7 @@ MonoBehaviour:
   pickedItemType: 
   throwForce: 15
   throwAngle: 45
-  HoldTime: 2
+  HoldTime: 3.5
 --- !u!1 &30786094
 GameObject:
   m_ObjectHideFlags: 0
@@ -1917,7 +1917,7 @@ MonoBehaviour:
   pickedItemType: 
   throwForce: 15
   throwAngle: 45
-  HoldTime: 2
+  HoldTime: 3.5
 --- !u!1 &857158670 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8568948079326307115, guid: 682e7292aebd7ab4c8cb299e23631756, type: 3}

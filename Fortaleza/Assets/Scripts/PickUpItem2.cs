@@ -21,7 +21,7 @@ public class PickUpItem2 : MonoBehaviour
     {
         DetectMovement();
 
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.N))
         {
             if (pickedItem == null)
             {
@@ -29,20 +29,21 @@ public class PickUpItem2 : MonoBehaviour
             }
             else
             {
-                StartTimer = true;
-                StartCoroutine(HoldTimer());
+                ReleaseItem();
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            StartTimer = true;
+            StartCoroutine(HoldTimer());
+        }
+        
         if (Input.GetKeyUp(KeyCode.B))
         {
             StartTimer = false;
         }
 
-        if (pickedItem != null && Input.GetKey("o"))
-        {
-            ReleaseItem();
-        }
     }
 
     IEnumerator HoldTimer()
