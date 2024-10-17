@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Item
   - Fuego
+  - Camera
   layers:
   - Default
   - TransparentFX

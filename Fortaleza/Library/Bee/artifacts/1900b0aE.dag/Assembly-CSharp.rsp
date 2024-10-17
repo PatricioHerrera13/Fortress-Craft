@@ -349,6 +349,7 @@
 "Assets/Fonts/Script/scriptTexttest.cs"
 "Assets/Scripts/Basurero.cs"
 "Assets/Scripts/BidonComb.cs"
+"Assets/Scripts/CameraVS.cs"
 "Assets/Scripts/CuboDeAgua.cs"
 "Assets/Scripts/FireSpawner.cs"
 "Assets/Scripts/Fuego.cs"
