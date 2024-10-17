@@ -13,6 +13,8 @@ public class Timer : MonoBehaviour
     public GameObject PanelDerrota;
     public float segundos = 2;
     public float fase1 = 0;
+    public GameObject planos;
+    public GameObject bloqueo;
 
     // Update is called once per frame
     void Update()
@@ -20,9 +22,16 @@ public class Timer : MonoBehaviour
         
         if(timer > 0)
         {
+            // Restar tiempo al cronómetro
             timer -= Time.deltaTime;
 
-            textoTimer.text = "00:" + timer.ToString("f0");
+            // Calcular minutos y segundos
+            int minutes = Mathf.FloorToInt(timer / 60);
+            int seconds = Mathf.FloorToInt(timer % 60);
+
+            // Actualizar el texto, asegurando que siempre tenga dos dígitos
+            textoTimer.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+
 
             if(portal.cantEntrega >= 2)
             {
@@ -56,6 +65,7 @@ public class Timer : MonoBehaviour
         if(fase1 == 0)
         {
             fase1 = 1;
+            bloqueo.SetActive(false);
             PanelFase.SetActive(true);
             yield return new WaitForSeconds(segundos); // Espera por el tiempo especificado
             PanelFase.SetActive(false); // Desactiva el objeto
