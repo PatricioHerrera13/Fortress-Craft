@@ -346,12 +346,14 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
+"Assets/Fonts/Script/scriptTexttest.cs"
 "Assets/Scripts/Basurero.cs"
 "Assets/Scripts/BidonComb.cs"
 "Assets/Scripts/CuboDeAgua.cs"
 "Assets/Scripts/FireSpawner.cs"
 "Assets/Scripts/Fuego.cs"
 "Assets/Scripts/Item.cs"
+"Assets/Scripts/LookAtCamera.cs"
 "Assets/Scripts/Menu.cs"
 "Assets/Scripts/Minion.cs"
 "Assets/Scripts/monsterSpawner.cs"
@@ -366,6 +368,7 @@
 "Assets/Scripts/PozoDeAgua.cs"
 "Assets/Scripts/Table.cs"
 "Assets/Scripts/TanqueComb.cs"
+"Assets/Scripts/Timer.cs"
 -langversion:9.0
 
 /deterministic

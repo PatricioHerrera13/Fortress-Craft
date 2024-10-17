@@ -7,6 +7,7 @@ public class PortalDeEntregas : MonoBehaviour
     public Collider jugadorCollider; // Collider del jugador
     public Collider jugadorCollider1; // Collider del jugador
     public string itemRequerido; // El tipo de ítem que se necesita para entregar el pedido
+    public float cantEntrega = 0;
 
     private void OnTriggerStay(Collider other)
     {
@@ -22,12 +23,14 @@ public class PortalDeEntregas : MonoBehaviour
                 // Verificar si el jugador sostiene un ítem y si ese ítem es el requerido
                 if (playerPickUp != null && !string.IsNullOrEmpty(playerPickUp.GetPickedItemType()))
                 {
+                    Debug.Log("verificacion");
                     string tipoItemJugador = playerPickUp.GetPickedItemType();
                     Debug.Log(tipoItemJugador);
 
                     if (tipoItemJugador == itemRequerido)
                     {
                         // El ítem es el correcto, eliminarlo del OrderManager
+                        Debug.Log("ITEM CORRECTO");
                         Sprite pedidoSprite = BuscarPedidoSprite(itemRequerido);
 
                         if (pedidoSprite != null && orderManager.EliminarPedido(pedidoSprite))
@@ -40,6 +43,7 @@ public class PortalDeEntregas : MonoBehaviour
                                 GameObject objetoSostenido = hand.GetChild(0).gameObject;
                                 Destroy(objetoSostenido);
                                 Debug.Log("El objeto ha sido eliminado del jugador.");
+                                cantEntrega = cantEntrega + 1;
                             }
 
                             // Eliminar el tipo de ítem de las manos del jugador
@@ -63,15 +67,20 @@ public class PortalDeEntregas : MonoBehaviour
     }
 
     // Método para buscar el Sprite correspondiente al nombre del pedido
-    private Sprite BuscarPedidoSprite(string nombrePedido)
+    public Sprite BuscarPedidoSprite(string nombrePedido)
     {
         foreach (Sprite pedido in orderManager.possibleOrders)
         {
-            if (pedido.name == nombrePedido)
+            Debug.Log("Sprite encontrado: " + pedido.name);
+            Debug.Log("Necesario: " + nombrePedido);
+            if (pedido.name.Trim() == nombrePedido.Trim())
             {
+                Debug.Log("si negro");
                 return pedido;
             }
         }
+
+        Debug.Log("no negro");
         return null; // No se encontró un Sprite con ese nombre
     }
 }
