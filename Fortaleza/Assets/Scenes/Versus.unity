@@ -3071,6 +3071,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1151684386}
   - component: {fileID: 1151684385}
+  - component: {fileID: 1151684387}
   m_Layer: 0
   m_Name: ZonaRecarga
   m_TagString: Untagged
@@ -3107,6 +3108,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!114 &1151684387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151684384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c53e1426ccecb714e9b38641c0ecab68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zonaRecarga: {fileID: 1151684385}
+  "ca\xF1on1": {fileID: 615349393}
+  "ca\xF1on2": {fileID: 977828478}
+  p1: {fileID: 332823448}
+  p2: {fileID: 2100281076}
+  VelLen: 2
+  VelRap: 5
+  TiempoCarga: 3
+  cambioDir: 0
 --- !u!1 &1163583103
 GameObject:
   m_ObjectHideFlags: 0
@@ -4336,7 +4358,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1707036263}
   - component: {fileID: 1707036262}
-  - component: {fileID: 1707036264}
   m_Layer: 0
   m_Name: OrderManager
   m_TagString: Untagged
@@ -4374,27 +4395,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1707036264
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707036261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c53e1426ccecb714e9b38641c0ecab68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  zonaRecarga: {fileID: 1151684385}
-  "ca\xF1on1": {fileID: 615349393}
-  "ca\xF1on2": {fileID: 977828478}
-  p1: {fileID: 332823448}
-  p2: {fileID: 2100281076}
-  VelLen: 2
-  VelRap: 5
-  TiempoCarga: 3
-  cambioDir: 0
 --- !u!1 &1743882300
 GameObject:
   m_ObjectHideFlags: 0
