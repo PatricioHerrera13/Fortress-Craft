@@ -17,46 +17,49 @@ public class DeteccionDisparo : MonoBehaviour
     private Vector3 posInicialCañon1;  // Posición inicial del cañón derecho
     private Vector3 posInicialCañon2;  // Posición inicial del cañón izquierdo
     public GameObject proyectil;
+    public Transform puntoDisparo1;  // Punto de salida del proyectil para cañón1
+    public Transform puntoDisparo2;  // Punto de salida del proyectil para cañón2
+    public float fuerzaDisparo = 20f;  // Fuerza con la que el proyectil será disparado
+
+    private bool haDisparado = false;  // Flag para evitar múltiples disparos
 
     void Start()
     {
         Debug.Log("Pos. Inicial Lista");
         posInicialCañon1 = cañon1.transform.position;
         posInicialCañon2 = cañon2.transform.position;
-        
     }
 
     void OnTriggerStay(Collider other)
     {
-        //Debug.Log("Entrando en el trigger con: " + other.tag);
-
         if (other.CompareTag("Player"))
         {
-            if (other == p1 && Input.GetKey(KeyCode.E))
+            if (other == p1 && Input.GetKey(KeyCode.E) && !haDisparado)  // Verificamos que no haya disparado aún
             {
                 Debug.Log("p1 interactua");
-                StartCoroutine(MoverCañon(cañon1, dirDerecha, posInicialCañon1));
+                StartCoroutine(MoverCañon(cañon1, dirDerecha, posInicialCañon1, puntoDisparo1, Vector3.right));
             }
 
-            if (other == p2 && Input.GetKey(KeyCode.E))
+            if (other == p2 && Input.GetKey(KeyCode.E) && !haDisparado)  // Verificamos que no haya disparado aún
             {
                 Debug.Log("p2 interactua");
-                StartCoroutine(MoverCañon(cañon2, dirIzquierda, posInicialCañon2));
+                StartCoroutine(MoverCañon(cañon2, dirIzquierda, posInicialCañon2, puntoDisparo2, Vector3.left));
             }
         }
     }
 
-    IEnumerator MoverCañon(GameObject cañon, Vector3 direccion, Vector3 posInicial)
+    IEnumerator MoverCañon(GameObject cañon, Vector3 direccion, Vector3 posInicial, Transform puntoDisparo, Vector3 direccionDisparo)
     {
         Debug.Log("Preparando Cañon: " + cañon.name);
         
+        haDisparado = true;  // Evitar múltiples disparos
+
         // Movimiento hacia atrás (lento)
         float tiempo = 0f;
         Vector3 objetivo = cañon.transform.position + direccion;
 
         while (tiempo < TiempoCarga)
         {
-            //Debug.Log("Retrocediendo " + cañon.name);
             cañon.transform.position = Vector3.Lerp(cañon.transform.position, objetivo, tiempo / TiempoCarga);
             tiempo += Time.deltaTime * VelLen;
             yield return null;
@@ -66,16 +69,31 @@ public class DeteccionDisparo : MonoBehaviour
         // Pausa en la posición de disparo
         yield return new WaitForSeconds(TiempoCarga);
 
+        // Instanciar el proyectil en la punta del cañón (solo 1 vez)
+        DispararProyectil(puntoDisparo, direccionDisparo);
+
         // Movimiento hacia adelante (rápido)
         tiempo = 0f;
         while (tiempo < TiempoCarga)
         {
-            //Debug.Log("Disparo de " + cañon.name);
             cañon.transform.position = Vector3.Lerp(cañon.transform.position, posInicial, tiempo / TiempoCarga);
             tiempo += Time.deltaTime * VelRap;
             yield return null;
         }
+
+        // Permitir que el cañón vuelva a disparar
+        haDisparado = false;
     }
 
-    
+    void DispararProyectil(Transform puntoDisparo, Vector3 direccionDisparo)
+    {
+        GameObject proyectilInstanciado = Instantiate(proyectil, puntoDisparo.position, puntoDisparo.rotation);
+        Rigidbody rb = proyectilInstanciado.GetComponent<Rigidbody>();
+
+        if (rb != null)
+        {
+            // Aplicar fuerza en la dirección especificada (X positivo o X negativo)
+            rb.AddForce(direccionDisparo * fuerzaDisparo, ForceMode.Impulse);
+        }
+    }
 }

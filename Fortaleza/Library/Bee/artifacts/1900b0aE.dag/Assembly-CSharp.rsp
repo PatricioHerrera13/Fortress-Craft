@@ -371,6 +371,8 @@
 "Assets/Scripts/Table.cs"
 "Assets/Scripts/TanqueComb.cs"
 "Assets/Scripts/Timer.cs"
+"Assets/Scripts/VidaFortaleza.cs"
+"Assets/Scripts/VidaFortCanvas.cs"
 -langversion:9.0
 
 /deterministic
