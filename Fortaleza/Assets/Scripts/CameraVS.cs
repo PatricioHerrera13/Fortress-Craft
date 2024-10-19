@@ -10,7 +10,7 @@ public class CameraVS : MonoBehaviour
     public float borderSize = 0.02f; // Tamaño del borde (ajustable)
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         // Configuración de pantalla dividida con bordes negros
         Cam1.rect = new Rect(borderSize, borderSize, 0.5f - borderSize * 2, 1 - borderSize * 2); // Mitad izquierda con borde

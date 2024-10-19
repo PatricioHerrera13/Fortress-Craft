@@ -372,6 +372,7 @@
 "Assets/Scripts/TanqueComb.cs"
 "Assets/Scripts/Timer.cs"
 "Assets/Scripts/VidaFortaleza.cs"
+"Assets/Scripts/VidaFortaleza2.cs"
 "Assets/Scripts/VidaFortCanvas.cs"
 -langversion:9.0
 
