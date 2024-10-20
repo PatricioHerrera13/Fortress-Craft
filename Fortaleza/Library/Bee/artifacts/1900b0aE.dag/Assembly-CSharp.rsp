@@ -352,6 +352,7 @@
 "Assets/Scripts/CameraVS.cs"
 "Assets/Scripts/CuboDeAgua.cs"
 "Assets/Scripts/DeteccionDisparo.cs"
+"Assets/Scripts/DeteccionDisparoP2.cs"
 "Assets/Scripts/FireSpawner.cs"
 "Assets/Scripts/Fuego.cs"
 "Assets/Scripts/Item.cs"

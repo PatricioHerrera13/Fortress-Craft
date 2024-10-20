@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class VidaFortaleza : MonoBehaviour
 {
-    public VidaFortCanvas canvas1; // Referencia al script que maneja los paneles
-    public RectTransform fort1Panel; // RectTransform del panel Fort1
+    public Canvas VidasFort1; // Referencia al canvas de Fort1
+    public RectTransform fort1Image; // RectTransform de la imagen dentro del panel Fort1
 
     void Start()
     {
-        // Asegúrate de obtener la referencia al panel Fort1 desde el canvas
-        if (canvas1 != null)
+        // Asegúrate de obtener la referencia a la imagen dentro del panel Fort1
+        if (VidasFort1 != null)
         {
-            fort1Panel = canvas1.VidasFort1.GetComponent<RectTransform>();
+            fort1Image = VidasFort1.transform.Find("Fort1/Image")?.GetComponent<RectTransform>();
+            if (fort1Image == null)
+            {
+                Debug.LogError("No se encontró la imagen dentro del panel Fort1.");
+            }
         }
     }
 
@@ -21,12 +25,12 @@ public class VidaFortaleza : MonoBehaviour
         if (other.CompareTag("Proyectil"))
         {
             Debug.Log("Nashe en 1");
-            // Reducir el tamaño del panel Fort1 en un 20%
-            if (fort1Panel != null)
+            // Reducir el tamaño de la imagen dentro del panel Fort1 en un 20%
+            if (fort1Image != null)
             {
                 // Calcular el nuevo tamaño
-                Vector3 newScale = fort1Panel.localScale * 0.8f; // Reducir en un 20%
-                fort1Panel.localScale = newScale;
+                Vector3 newScale = fort1Image.localScale * 0.8f; // Reducir en un 20%
+                fort1Image.localScale = newScale;
             }
         }
     }

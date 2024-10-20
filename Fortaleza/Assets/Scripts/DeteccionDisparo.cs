@@ -5,52 +5,57 @@ public class DeteccionDisparo : MonoBehaviour
 {
     public Collider zonaRecarga;
     public GameObject cañon1;  // Cañón derecho para player 1
-    public GameObject cañon2;  // Cañón izquierdo para player 2
-    public Collider p1;
-    public Collider p2;
+    public Collider p1;  // Collider del jugador 1
     public float VelLen = 1f;  // Velocidad lenta (movimiento hacia atrás)
     public float VelRap = 3f;  // Velocidad rápida (movimiento hacia adelante)
     public float TiempoCarga = 2f;  // Tiempo de carga antes de disparar
-    public bool cambioDir = false;
     private Vector3 dirDerecha = Vector3.left;  // Movimiento hacia atrás para cañón derecho
-    private Vector3 dirIzquierda = Vector3.right;  // Movimiento hacia atrás para cañón izquierdo
     private Vector3 posInicialCañon1;  // Posición inicial del cañón derecho
-    private Vector3 posInicialCañon2;  // Posición inicial del cañón izquierdo
     public GameObject proyectil;
     public Transform puntoDisparo1;  // Punto de salida del proyectil para cañón1
-    public Transform puntoDisparo2;  // Punto de salida del proyectil para cañón2
     public float fuerzaDisparo = 20f;  // Fuerza con la que el proyectil será disparado
 
     private bool haDisparado = false;  // Flag para evitar múltiples disparos
+    private bool enZonaRecarga = false;  // Flag para saber si el jugador está en la zona
 
     void Start()
     {
-        Debug.Log("Pos. Inicial Lista");
+        Debug.Log("Pos. Inicial Lista para Cañón 1");
         posInicialCañon1 = cañon1.transform.position;
-        posInicialCañon2 = cañon2.transform.position;
     }
 
-    void OnTriggerStay(Collider other)
+    // Se detecta cuando el jugador entra en la zona de recarga
+    void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && other == p1)  // Verificamos que sea el jugador 1
         {
-            if (other == p1 && Input.GetKey(KeyCode.E) && !haDisparado)  // Verificamos que no haya disparado aún
-            {
-                Debug.Log("p1 interactua");
-                StartCoroutine(MoverCañon(cañon1, dirDerecha, posInicialCañon1, puntoDisparo1, Vector3.right));
-            }
+            enZonaRecarga = true;  // El jugador está en la zona de recarga
+            Debug.Log("Player 1 ha entrado en la zona de recarga");
+        }
+    }
 
-            if (other == p2 && Input.GetKey(KeyCode.E) && !haDisparado)  // Verificamos que no haya disparado aún
-            {
-                Debug.Log("p2 interactua");
-                StartCoroutine(MoverCañon(cañon2, dirIzquierda, posInicialCañon2, puntoDisparo2, Vector3.left));
-            }
+    // Se detecta cuando el jugador sale de la zona de recarga
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && other == p1)
+        {
+            enZonaRecarga = false;  // El jugador ha salido de la zona de recarga
+            Debug.Log("Player 1 ha salido de la zona de recarga");
+        }
+    }
+
+    void Update()
+    {
+        if (enZonaRecarga && Input.GetKey(KeyCode.E) && !haDisparado)
+        {
+            Debug.Log("Player 1 interactúa con el cañón");
+            StartCoroutine(MoverCañon(cañon1, dirDerecha, posInicialCañon1, puntoDisparo1, Vector3.right));
         }
     }
 
     IEnumerator MoverCañon(GameObject cañon, Vector3 direccion, Vector3 posInicial, Transform puntoDisparo, Vector3 direccionDisparo)
     {
-        Debug.Log("Preparando Cañon: " + cañon.name);
+        Debug.Log("Preparando Cañón: " + cañon.name);
         
         haDisparado = true;  // Evitar múltiples disparos
 
@@ -67,9 +72,9 @@ public class DeteccionDisparo : MonoBehaviour
 
         Debug.Log("Pausa...");
         // Pausa en la posición de disparo
-        yield return new WaitForSeconds(TiempoCarga);
+        yield return new WaitForSeconds(0.5f);
 
-        // Instanciar el proyectil en la punta del cañón (solo 1 vez)
+        // Instanciar el proyectil en la punta del cañón
         DispararProyectil(puntoDisparo, direccionDisparo);
 
         // Movimiento hacia adelante (rápido)
@@ -87,12 +92,12 @@ public class DeteccionDisparo : MonoBehaviour
 
     void DispararProyectil(Transform puntoDisparo, Vector3 direccionDisparo)
     {
+        Debug.Log("Disparando proyectil...");
         GameObject proyectilInstanciado = Instantiate(proyectil, puntoDisparo.position, puntoDisparo.rotation);
         Rigidbody rb = proyectilInstanciado.GetComponent<Rigidbody>();
 
         if (rb != null)
         {
-            // Aplicar fuerza en la dirección especificada (X positivo o X negativo)
             rb.AddForce(direccionDisparo * fuerzaDisparo, ForceMode.Impulse);
         }
     }
