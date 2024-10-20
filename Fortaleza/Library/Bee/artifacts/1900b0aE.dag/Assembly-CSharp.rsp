@@ -369,6 +369,7 @@
 "Assets/Scripts/PointerController.cs"
 "Assets/Scripts/PortalDeEntregas.cs"
 "Assets/Scripts/PozoDeAgua.cs"
+"Assets/Scripts/ShopTrigger.cs"
 "Assets/Scripts/Table.cs"
 "Assets/Scripts/TanqueComb.cs"
 "Assets/Scripts/Timer.cs"

@@ -25,7 +25,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 14913
+  controlID: 5171
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 14973
+  controlID: 5232
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -199,10 +199,10 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 352}
-      m_SelectedIDs: 9ad2ffff
-      m_LastClickedID: -11622
-      m_ExpandedIDs: 38fbffff34610000386100005461000094610000e061000044620000ee620000346300003e63000068630000
+      scrollPos: {x: 0, y: 64}
+      m_SelectedIDs: f6edffff
+      m_LastClickedID: -4618
+      m_ExpandedIDs: 3afbffff386100009861000048620000fc620000426300006e630000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -304,7 +304,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 14914
+  controlID: 5172
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -557,9 +557,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -13.807229, y: 24.50214, z: -31.846722}
+    m_Target: {x: 338.95752, y: 320.88892, z: 264.34015}
     speed: 2
-    m_Value: {x: -13.807229, y: 24.50214, z: -31.846722}
+    m_Value: {x: 338.95752, y: 320.88892, z: 264.34015}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -606,13 +606,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.32107523, y: 0.010988198, z: -0.007986875, w: -0.94741124}
+    m_Target: {x: -0.12798354, y: 0.06139495, z: -0.0122685945, w: -0.9902256}
     speed: 2
-    m_Value: {x: -0.32107523, y: 0.010988198, z: -0.007986875, w: -0.94741124}
+    m_Value: {x: -0.12798354, y: 0.06139495, z: -0.0122685945, w: -0.9902257}
   m_Size:
-    m_Target: 0.8660254
+    m_Target: 400
     speed: 2
-    m_Value: 0.8660254
+    m_Value: 400
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -704,22 +704,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefab Item
+    - Assets/Scripts
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Prefab Item
+  - Assets/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\usuario\Desktop\Proyecto ShadowGear\Fortress-Craft\Fortaleza
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 65}
-    m_SelectedIDs: 72650000
-    m_LastClickedID: 25970
-    m_ExpandedIDs: 000000001464000016640000186400001a64000000ca9a3b
+    scrollPos: {x: 0, y: 125}
+    m_SelectedIDs: 88650000
+    m_LastClickedID: 25992
+    m_ExpandedIDs: 000000002264000024640000266400002864000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -747,7 +747,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000001464000016640000186400001a64000000ca9a3b
+    m_ExpandedIDs: 000000002264000024640000266400002864000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -772,8 +772,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 9ad2ffff
-    m_LastClickedInstanceID: -11622
+    m_SelectedInstanceIDs: f6edffff
+    m_LastClickedInstanceID: -4618
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 285a0000265a0000205a0000186500006a650000c25a00000e65000000000000
     m_RenameOverlay:
@@ -799,7 +799,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 43}
+    m_ScrollPosition: {x: 0, y: 150}
     m_GridSize: 64
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 240
