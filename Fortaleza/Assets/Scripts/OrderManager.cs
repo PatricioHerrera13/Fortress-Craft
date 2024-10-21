@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,11 +11,14 @@ public class OrderManager : MonoBehaviour
     public RectTransform orderPanel; // El panel que contiene los pedidos
     public float orderInterval = 6f; // Tiempo en segundos entre la aparición de cada pedido
     private List<Image> activeOrders = new List<Image>(); // Lista de imágenes que ya están activas
-    private const float orderSize = 100f; // Tamaño fijo para las imágenes de pedidos (50x50)
+    private const float orderSize = 30f; // Tamaño fijo para las imágenes de pedidos (50x50)
     private const float maxSpacing = 50f; // Espacio máximo entre los pedidos
+    public Button back;
 
     private void Start()
     {
+        Button btn = back.GetComponent<Button>();
+        btn.onClick.AddListener(Teleport);
         // Desactivar todos los slots de pedidos al inicio
         foreach (Image slot in orderSlots)
         {
@@ -110,5 +114,10 @@ public class OrderManager : MonoBehaviour
         }
 
         return false; // El pedido no se encontró
+    }
+
+    void Teleport()
+    {
+        SceneManager.LoadScene("MENU");
     }
 }
