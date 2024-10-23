@@ -4,15 +4,15 @@ using UnityEngine;
 public class DeteccionDisparo : MonoBehaviour
 {
     public Collider zonaRecarga;
-    public GameObject cañon1;  // Cañón derecho para player 1
+    public GameObject cañon1;  // Cañón izquierdo para player 1
     public Collider p1;  // Collider del jugador 1
     public float VelLen = 1f;  // Velocidad lenta (movimiento hacia atrás)
     public float VelRap = 3f;  // Velocidad rápida (movimiento hacia adelante)
     public float TiempoCarga = 2f;  // Tiempo de carga antes de disparar
-    private Vector3 dirDerecha = Vector3.left;  // Movimiento hacia atrás para cañón derecho
-    private Vector3 posInicialCañon1;  // Posición inicial del cañón derecho
+    private Vector3 dirIzquierda = Vector3.right;  // Movimiento hacia atrás para cañón izquierdo
+    private Vector3 posInicialCañon;  // Posición inicial del cañón izquierdo
     public GameObject proyectil;
-    public Transform puntoDisparo1;  // Punto de salida del proyectil para cañón1
+    public Transform puntoDisparo1;  // Punto de salida del proyectil para cañón2
     public float fuerzaDisparo = 20f;  // Fuerza con la que el proyectil será disparado
 
     private bool haDisparado = false;  // Flag para evitar múltiples disparos
@@ -21,7 +21,7 @@ public class DeteccionDisparo : MonoBehaviour
     void Start()
     {
         Debug.Log("Pos. Inicial Lista para Cañón 1");
-        posInicialCañon1 = cañon1.transform.position;
+        posInicialCañon = cañon1.transform.position;
     }
 
     // Se detecta cuando el jugador entra en la zona de recarga
@@ -46,10 +46,10 @@ public class DeteccionDisparo : MonoBehaviour
 
     void Update()
     {
-        if (enZonaRecarga && Input.GetKey(KeyCode.E) && !haDisparado)
+        if (enZonaRecarga && Input.GetKey(KeyCode.O) && !haDisparado)
         {
             Debug.Log("Player 1 interactúa con el cañón");
-            StartCoroutine(MoverCañon(cañon1, dirDerecha, posInicialCañon1, puntoDisparo1, Vector3.right));
+            StartCoroutine(MoverCañon(cañon1, dirIzquierda, posInicialCañon, puntoDisparo1, Vector3.left));
         }
     }
 

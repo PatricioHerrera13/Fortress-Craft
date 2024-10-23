@@ -60,6 +60,7 @@ public class Fuego : MonoBehaviour
             if (firePrefab == null)
             {
                 Debug.LogError("firePrefab es nulo. Asegúrate de asignar un prefab válido en el inspector.");
+                
                 return; // Salir si no hay un prefab válido
             }
 

@@ -1,15 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public class DeteccionDisparoP2 : MonoBehaviour
+public class DeteccionDisparo2 : MonoBehaviour
 {
     public Collider zonaRecarga;
-    public GameObject cañon2;  // Cañón izquierdo para player 2
-    public Collider p2;  // Collider del jugador 2
+    public GameObject cañon2;  // Cañón izquierdo para player 1
+    public Collider p2;  // Collider del jugador 1
     public float VelLen = 1f;  // Velocidad lenta (movimiento hacia atrás)
     public float VelRap = 3f;  // Velocidad rápida (movimiento hacia adelante)
     public float TiempoCarga = 2f;  // Tiempo de carga antes de disparar
-    private Vector3 dirIzquierda = Vector3.right;  // Movimiento hacia atrás para cañón izquierdo
+    private Vector3 dirIzquierda = Vector3.left;  // Movimiento hacia atrás para cañón izquierdo
     private Vector3 posInicialCañon2;  // Posición inicial del cañón izquierdo
     public GameObject proyectil;
     public Transform puntoDisparo2;  // Punto de salida del proyectil para cañón2
@@ -20,17 +20,17 @@ public class DeteccionDisparoP2 : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("Pos. Inicial Lista para Cañón 2");
+        Debug.Log("Pos. Inicial Lista para Cañón 1");
         posInicialCañon2 = cañon2.transform.position;
     }
 
     // Se detecta cuando el jugador entra en la zona de recarga
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && other == p2)  // Verificamos que sea el jugador 2
+        if (other.CompareTag("Player") && other == p2)  // Verificamos que sea el jugador 1
         {
             enZonaRecarga = true;  // El jugador está en la zona de recarga
-            Debug.Log("Player 2 ha entrado en la zona de recarga");
+            Debug.Log("Player 1 ha entrado en la zona de recarga");
         }
     }
 
@@ -40,15 +40,15 @@ public class DeteccionDisparoP2 : MonoBehaviour
         if (other.CompareTag("Player") && other == p2)
         {
             enZonaRecarga = false;  // El jugador ha salido de la zona de recarga
-            Debug.Log("Player 2 ha salido de la zona de recarga");
+            Debug.Log("Player 1 ha salido de la zona de recarga");
         }
     }
 
     void Update()
     {
-        if (enZonaRecarga && Input.GetKey(KeyCode.O) && !haDisparado)
+        if (enZonaRecarga && Input.GetKey(KeyCode.P) && !haDisparado)
         {
-            Debug.Log("Player 2 interactúa con el cañón");
+            Debug.Log("Player 1 interactúa con el cañón");
             StartCoroutine(MoverCañon(cañon2, dirIzquierda, posInicialCañon2, puntoDisparo2, Vector3.left));
         }
     }
@@ -98,7 +98,7 @@ public class DeteccionDisparoP2 : MonoBehaviour
 
         if (rb != null)
         {
-            rb.AddForce(direccionDisparo * fuerzaDisparo, ForceMode.Impulse);
+            rb.AddForce(-direccionDisparo * fuerzaDisparo, ForceMode.Impulse);
         }
     }
 }

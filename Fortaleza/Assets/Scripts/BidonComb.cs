@@ -9,11 +9,12 @@ public class BidonComb : MonoBehaviour
 
     // Referencia al 'HandPoint' donde se colocan los objetos que el jugador sostiene
     public Transform handPoint;
+    public Transform handPoint1;
 
     void Update()
     {
         // Verifica si el bidón está siendo sostenido por el player (colocado en HandPoint)
-        if (transform.parent == handPoint)
+        if (transform.parent == handPoint || transform.parent == handPoint1) 
         {
             isHeldByPlayer = true;
             

@@ -54,21 +54,18 @@ public class OrderManager : MonoBehaviour
             if (!activeOrders.Contains(orderSlots[i]))
             {
                 orderSlots[i].sprite = newOrder;
-                orderSlots[i].gameObject.SetActive(true); // Activar el slot de imagen
+                orderSlots[i].gameObject.SetActive(true);
                 activeOrders.Add(orderSlots[i]);
+                AdjustOrderPositions();
                 break;
             }
         }
-
-        // Reajustar las posiciones de los pedidos activos para que se distribuyan dentro del panel
-        AdjustOrderPositions();
     }
 
     private void RemoveOldestOrder()
     {
-        // Desactiva el pedido más antiguo (el primero en la lista)
-        Image oldestOrder = activeOrders[0];
-        oldestOrder.gameObject.SetActive(false); // Desactivar el slot de imagen
+        // Remover el pedido más antiguo y desactivar el slot de imagen
+        activeOrders[0].gameObject.SetActive(false);
         activeOrders.RemoveAt(0);
     }
 
@@ -116,8 +113,41 @@ public class OrderManager : MonoBehaviour
         return false; // El pedido no se encontró
     }
 
+    // Método para obtener la lista de pedidos activos como strings de nombres de ítems
+    public List<OrderData> GetOrders()
+    {
+        List<OrderData> orders = new List<OrderData>();
+        foreach (Image orderSlot in activeOrders)
+        {
+            if (orderSlot.gameObject.activeSelf)
+            {
+                orders.Add(new OrderData { itemName = orderSlot.sprite.name });
+            }
+        }
+        return orders;
+    }
+
+    // Método para obtener el sprite de un pedido dado el nombre del ítem
+    public Sprite GetOrderSprite(string itemName)
+    {
+        foreach (Image orderSlot in activeOrders)
+        {
+            if (orderSlot.sprite.name == itemName)
+            {
+                return orderSlot.sprite;
+            }
+        }
+        return null;
+    }
+
     void Teleport()
     {
         SceneManager.LoadScene("MENU");
     }
+}
+
+// Clase auxiliar para los datos de cada pedido
+public class OrderData
+{
+    public string itemName;
 }
