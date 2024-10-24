@@ -7,7 +7,7 @@ public class CraftingAnvil : MonoBehaviour {
 
     [SerializeField] private Image recipeImage;
     [SerializeField] private List<CraftingRecipeSO> craftingRecipeSOList;
-    [SerializeField] private BoxCollider placeItemsAreaBoxCollider;
+    [SerializeField] public BoxCollider placeItemsAreaBoxCollider;
     [SerializeField] private Transform itemSpawnPoint;
 
     private CraftingRecipeSO craftingRecipeSO;
@@ -17,6 +17,20 @@ public class CraftingAnvil : MonoBehaviour {
     }
 
     public void NextRecipe() {
+        // Verifica si hay ítems en el área de elaboración
+        Collider[] colliderArray = Physics.OverlapBox(
+            transform.position + placeItemsAreaBoxCollider.center,
+            placeItemsAreaBoxCollider.size,
+            placeItemsAreaBoxCollider.transform.rotation);
+
+        // Verifica si hay algún objeto con el tag "Item"
+        foreach (Collider collider in colliderArray) {
+            if (collider.CompareTag("Item")) {
+                Debug.Log("No puedes cambiar la receta mientras hay ítems en el área.");
+                return;
+            }
+        }
+
         // Cambia a la siguiente receta en la lista
         if (craftingRecipeSO == null) {
             craftingRecipeSO = craftingRecipeSOList[0]; // Primera receta
@@ -25,7 +39,7 @@ public class CraftingAnvil : MonoBehaviour {
             index = (index + 1) % craftingRecipeSOList.Count; // Cicla a la siguiente receta
             craftingRecipeSO = craftingRecipeSOList[index];
         }
-        
+
         recipeImage.sprite = craftingRecipeSO.sprite; // Actualiza la imagen de la receta
     }
 

@@ -21,10 +21,6 @@ public class CameraVS : MonoBehaviour
         Cam1.rect = new Rect(borderSize, borderSize, 0.5f - borderSize * 2, 1 - borderSize * 2); // Mitad izquierda con borde
         Cam2.rect = new Rect(0.5f + borderSize, borderSize, 0.5f - borderSize * 2, 1 - borderSize * 2); // Mitad derecha con borde
 
-        // Asignar las posiciones iniciales específicas
-        Cam1.transform.position = new Vector3(-43.5f, 15, -20);
-        Cam2.transform.position = new Vector3(0, 15, -20);
-        
         // Ajustar la rotación inicial de las cámaras (45 grados en el eje X)
         Cam1.transform.rotation = Quaternion.Euler(45, 0, 0);
         Cam2.transform.rotation = Quaternion.Euler(45, 0, 0);

@@ -8,24 +8,39 @@ public class PlayerCrafting : MonoBehaviour {
     [SerializeField] private float interactDistance = 3f; // Distancia de interacción
     private CraftingAnvil currentCraftingAnvil;
 
+    public BoxCollider handCollider; // Referencia al BoxCollider de la mano
+
+    // Asigna controles por jugador
+    public KeyCode interactKeyPlayer = KeyCode.X; // Tecla para Player 1
+    public KeyCode interactKeyPlayer2 = KeyCode.O; // Tecla para Player 2
+
+    // Indica si este script corresponde a Player 1 o Player 2
+    public bool isPlayer;
+
     private void Update() {
-        // Verifica si se presiona la tecla 'X'
-        if (Input.GetKeyDown(KeyCode.X)) {
-            // Busca el objeto CraftingAnvil más cercano
-            FindNearestCraftingAnvil();
-            if (currentCraftingAnvil != null) {
-                currentCraftingAnvil.NextRecipe(); // Cambia la receta al presionar 'X'
+        // Verifica si hay colisión entre la mano y el CraftingAnvil
+        if (IsHandCollidingWithCraftingAnvil() && currentCraftingAnvil != null) {
+            // Verifica si hay ítems en el área de elaboración
+            bool hasItemsInCraftingArea = HasItemsInCraftingArea(currentCraftingAnvil);
+
+            // Detecta la tecla según el jugador
+            KeyCode interactKey = isPlayer ? interactKeyPlayer : interactKeyPlayer2;
+
+            // Verifica si se presiona la tecla correspondiente al jugador
+            if (Input.GetKeyDown(interactKey)) {
+                if (!hasItemsInCraftingArea) {
+                    currentCraftingAnvil.NextRecipe(); // Cambia la receta si no hay ítems
+                } else {
+                    currentCraftingAnvil.Craft(); // Intenta elaborar si hay ítems
+                }
             }
         }
 
-        // Verifica si se presiona la tecla 'C' para intentar elaborar
-        if (Input.GetKeyDown(KeyCode.C) && currentCraftingAnvil != null) {
-            currentCraftingAnvil.Craft(); // Intenta elaborar el objeto
-        }
+        // Busca el objeto CraftingAnvil más cercano al inicio
+        FindNearestCraftingAnvil();
     }
 
     private void FindNearestCraftingAnvil() {
-        // Usa transform.position en lugar de playerCameraTransform.position
         Collider[] colliders = Physics.OverlapSphere(transform.position, interactDistance, interactLayerMask);
         float closestDistance = float.MaxValue;
 
@@ -44,5 +59,30 @@ public class PlayerCrafting : MonoBehaviour {
         if (closestDistance == float.MaxValue) {
             currentCraftingAnvil = null;
         }
+    }
+
+    private bool IsHandCollidingWithCraftingAnvil() {
+        // Verifica si el BoxCollider de la mano está colisionando con el CraftingAnvil
+        Collider[] colliders = Physics.OverlapBox(handCollider.bounds.center, handCollider.bounds.extents, Quaternion.identity);
+        foreach (var collider in colliders) {
+            if (collider.TryGetComponent(out CraftingAnvil _)) {
+                return true; // Hay colisión con el CraftingAnvil
+            }
+        }
+        return false; // No hay colisión
+    }
+
+    private bool HasItemsInCraftingArea(CraftingAnvil craftingAnvil) {
+        Collider[] colliderArray = Physics.OverlapBox(
+            craftingAnvil.transform.position + craftingAnvil.placeItemsAreaBoxCollider.center,
+            craftingAnvil.placeItemsAreaBoxCollider.size,
+            craftingAnvil.placeItemsAreaBoxCollider.transform.rotation);
+
+        foreach (Collider collider in colliderArray) {
+            if (collider.CompareTag("Item")) {
+                return true; // Hay al menos un ítem en el área
+            }
+        }
+        return false; // No hay ítems en el área
     }
 }

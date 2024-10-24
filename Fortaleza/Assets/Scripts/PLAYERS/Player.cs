@@ -7,13 +7,13 @@ public class Player : MonoBehaviour
     public float dashSpeed = 50f; // Velocidad del dash
     public float dashDuration = 0.2f; // Duración del dash
     public float dashCooldown = 1f; // Tiempo de espera entre dashes
-
     private Rigidbody rb;
     private bool isDashing = false;
     private float dashCooldownTimer = 0f;
     private Vector3 lastMovementDirection; // Guardar la última dirección de movimiento
 
     public Transform hand; // Referencia al objeto Hand
+    public float handOffsetDistance = 1f; // Distancia de la mano desde el jugador
 
     private void Awake()
     {
@@ -64,14 +64,24 @@ public class Player : MonoBehaviour
             // Limita la velocidad en diagonal para evitar que el jugador se mueva más rápido
             rb.velocity = Vector3.ClampMagnitude(movement * speed, speed);
 
-            // Actualiza la rotación de Hand en función de la dirección de movimiento, invertida
+            // Mueve la mano usando la posición del jugador y la dirección de movimiento o la última dirección válida
+            Vector3 handTargetPosition = transform.position + (lastMovementDirection.normalized * handOffsetDistance);
+
+            // Si hay movimiento, actualiza la posición y rotación de la mano según la dirección actual
             if (movement != Vector3.zero)
             {
+                hand.position = handTargetPosition; // Mover la mano hacia la nueva posición
                 hand.rotation = Quaternion.LookRotation(-movement); // Invertir la dirección de movimiento
+            }
+            else if (lastMovementDirection != Vector3.zero)
+            {
+                // Si no hay movimiento, mantén la mano en la última dirección válida
+                hand.position = handTargetPosition; // Mover la mano hacia la última dirección
+                hand.rotation = Quaternion.LookRotation(-lastMovementDirection);
             }
 
             // Dash
-            if (Input.GetKeyDown(KeyCode.U) && dashCooldownTimer <= 0)
+            if (Input.GetKeyDown(KeyCode.V) && dashCooldownTimer <= 0)
             {
                 StartCoroutine(Dash(lastMovementDirection));
             }

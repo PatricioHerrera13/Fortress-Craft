@@ -4,46 +4,62 @@ using UnityEngine;
 
 public class PickUpItem2 : MonoBehaviour
 {
-    public GameObject HandPoint;
+    public GameObject Hand; // Referencia al objeto Hand
     private GameObject pickedItem = null;
 
-    public string pickedItemType = "";
+    public string pickedItemType = ""; // Tipo de ítem que se está sosteniendo
     public float throwForce = 15f;
     public float throwAngle = 45f;
 
-    private Vector3 lastMoveDirection = Vector3.zero;
-    private Vector3 lastPosition = Vector3.zero;
+    private Vector3 lastMoveDirection = Vector3.zero; // Dirección del movimiento anterior
+    private Vector3 lastPosition = Vector3.zero; // Última posición conocida
 
     public float HoldTime = 2;
     private bool StartTimer;
+
+    private BoxCollider handCollider; // Referencia al BoxCollider de la mano
+    public Transform HandPoint; // Referencia al punto donde el ítem aparecerá
+
+    void Start()
+    {
+        handCollider = Hand.GetComponent<BoxCollider>(); // Obtiene el BoxCollider de Hand
+
+        // Verifica si el BoxCollider está presente
+        if (handCollider == null)
+        {
+            Debug.LogError("No BoxCollider found on Hand. Please add one.");
+        }
+    }
 
     void Update()
     {
         DetectMovement();
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.O))
         {
             if (pickedItem == null)
             {
-                TryPickUpItem();
+                TryPickUpItem(); // Intentar recoger un ítem
             }
             else
             {
-                ReleaseItem();
+                ReleaseItem(); // Soltar el ítem actual
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.I))
         {
             StartTimer = true;
             StartCoroutine(HoldTimer());
         }
-        
-        if (Input.GetKeyUp(KeyCode.B))
+
+        if (Input.GetKeyUp(KeyCode.I))
         {
             StartTimer = false;
         }
 
+        // Interacción con dispensadores
+        TryInteractWithDispenser();
     }
 
     IEnumerator HoldTimer()
@@ -82,8 +98,8 @@ public class PickUpItem2 : MonoBehaviour
                 {
                     other.GetComponent<Rigidbody>().useGravity = false;
                     other.GetComponent<Rigidbody>().isKinematic = true;
-                    other.transform.position = HandPoint.transform.position;
-                    other.gameObject.transform.SetParent(HandPoint.transform);
+                    other.transform.position = HandPoint.position; // Mueve el ítem a HandPoint
+                    other.gameObject.transform.SetParent(HandPoint); // Establece HandPoint como padre
 
                     pickedItem = other.gameObject;
                     pickedItemType = itemComponent.itemType;
@@ -125,6 +141,37 @@ public class PickUpItem2 : MonoBehaviour
 
             pickedItem = null;
             pickedItemType = "";
+        }
+    }
+
+    private void TryInteractWithDispenser()
+    {
+        if (Input.GetKeyDown(KeyCode.O) && pickedItem == null && handCollider != null) // Verifica si se presiona 'O'
+        {
+            Collider[] colliders = Physics.OverlapBox(Hand.transform.position, handCollider.size / 2, Hand.transform.rotation);
+            foreach (Collider other in colliders)
+            {
+                Dispenser dispenser = other.GetComponent<Dispenser>();
+                if (dispenser != null)
+                {
+                    dispenser.Interact(this); // Llama al método Interact del dispensador
+                    break; // Sale del bucle después de interactuar
+                }
+            }
+        }
+    }
+
+    public void GrabItemFromDispenser(Item item)
+    {
+        if (pickedItem == null)
+        {
+            pickedItem = item.gameObject;
+            pickedItemType = item.itemType;
+            item.transform.position = HandPoint.position; // Mueve el ítem a HandPoint
+            item.transform.SetParent(HandPoint); // Establece HandPoint como padre
+            item.GetComponent<Rigidbody>().isKinematic = true; // Hace el ítem kinemático
+            item.GetComponent<Rigidbody>().useGravity = false; // Desactiva la gravedad
+            Debug.Log($"Grabbed from dispenser: {pickedItemType}");
         }
     }
 
