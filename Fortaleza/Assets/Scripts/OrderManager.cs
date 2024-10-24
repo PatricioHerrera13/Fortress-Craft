@@ -14,6 +14,8 @@ public class OrderManager : MonoBehaviour
     private const float orderSize = 30f; // Tamaño fijo para las imágenes de pedidos (50x50)
     private const float maxSpacing = 50f; // Espacio máximo entre los pedidos
     public Button back;
+    
+    public List<OrderPrefabData> orderPrefabList; // Lista que vincula sprites de pedidos con prefabs
 
     private void Start()
     {
@@ -41,14 +43,14 @@ public class OrderManager : MonoBehaviour
     {
         if (activeOrders.Count >= orderSlots.Count)
         {
-            // Si hay 5 pedidos ya, remueve el más antiguo (primero) para hacer espacio
+            // Si hay más pedidos de los permitidos, remueve el más antiguo
             RemoveOldestOrder();
         }
 
         // Selecciona una nueva orden aleatoria
         Sprite newOrder = possibleOrders[Random.Range(0, possibleOrders.Count)];
 
-        // Encuentra el primer slot disponible (el primero que no esté activo)
+        // Encuentra el primer slot disponible
         for (int i = 0; i < orderSlots.Count; i++)
         {
             if (!activeOrders.Contains(orderSlots[i]))
@@ -57,6 +59,9 @@ public class OrderManager : MonoBehaviour
                 orderSlots[i].gameObject.SetActive(true);
                 activeOrders.Add(orderSlots[i]);
                 AdjustOrderPositions();
+
+                // Notificar al portal de entregas que actualice los items requeridos
+                FindObjectOfType<PortalDeEntregas>().ActualizarItemsRequeridos();
                 break;
             }
         }
@@ -94,50 +99,41 @@ public class OrderManager : MonoBehaviour
         }
     }
 
-    // Método para eliminar un pedido específico del panel
     public bool EliminarPedido(Sprite pedido)
     {
-        // Buscar el pedido en la lista de pedidos activos
         foreach (Image orderSlot in activeOrders)
         {
             if (orderSlot.sprite == pedido)
             {
-                // Desactivar el pedido encontrado y eliminarlo de la lista
                 orderSlot.gameObject.SetActive(false);
                 activeOrders.Remove(orderSlot);
-                AdjustOrderPositions(); // Reajustar las posiciones de los pedidos restantes
-                return true; // Pedido eliminado con éxito
+                AdjustOrderPositions();
+
+                // Actualizar los items requeridos en el portal de entregas
+                FindObjectOfType<PortalDeEntregas>().ActualizarItemsRequeridos();
+                return true;
             }
         }
-
-        return false; // El pedido no se encontró
+        return false;
     }
 
-    // Método para obtener la lista de pedidos activos como strings de nombres de ítems
-    public List<OrderData> GetOrders()
+    public List<OrderPrefabData> GetActiveOrders()
     {
-        List<OrderData> orders = new List<OrderData>();
+        List<OrderPrefabData> activeOrdersList = new List<OrderPrefabData>();
         foreach (Image orderSlot in activeOrders)
         {
             if (orderSlot.gameObject.activeSelf)
             {
-                orders.Add(new OrderData { itemName = orderSlot.sprite.name });
+                foreach (OrderPrefabData pedido in orderPrefabList)
+                {
+                    if (pedido.orderSprite == orderSlot.sprite)
+                    {
+                        activeOrdersList.Add(pedido);
+                    }
+                }
             }
         }
-        return orders;
-    }
-
-    // Método para obtener el sprite de un pedido dado el nombre del ítem
-    public Sprite GetOrderSprite(string itemName)
-    {
-        foreach (Image orderSlot in activeOrders)
-        {
-            if (orderSlot.sprite.name == itemName)
-            {
-                return orderSlot.sprite;
-            }
-        }
-        return null;
+        return activeOrdersList;
     }
 
     void Teleport()
@@ -146,8 +142,10 @@ public class OrderManager : MonoBehaviour
     }
 }
 
-// Clase auxiliar para los datos de cada pedido
-public class OrderData
+// Clase auxiliar para vincular sprites de pedidos con prefabs
+[System.Serializable]
+public class OrderPrefabData
 {
-    public string itemName;
+    public Sprite orderSprite;  // Imagen que representa el pedido
+    public GameObject orderPrefab;  // Prefab correspondiente al pedido
 }

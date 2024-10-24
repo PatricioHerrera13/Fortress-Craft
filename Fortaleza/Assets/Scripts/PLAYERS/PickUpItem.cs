@@ -5,7 +5,7 @@ using UnityEngine;
 public class PickUpItem : MonoBehaviour
 {
     public GameObject Hand; // Referencia al objeto Hand
-    private GameObject pickedItem = null;
+    private GameObject pickedItem = null; // El ítem que se está sosteniendo
 
     public string pickedItemType = ""; // Tipo de ítem que se está sosteniendo
     public float throwForce = 15f;
@@ -146,7 +146,7 @@ public class PickUpItem : MonoBehaviour
 
     private void TryInteractWithDispenser()
     {
-        if (Input.GetKeyDown(KeyCode.C) && pickedItem == null && handCollider != null) // Verifica si se presiona 'C'
+        if (Input.GetKeyDown(KeyCode.C) && pickedItem == null && handCollider != null)
         {
             Collider[] colliders = Physics.OverlapBox(Hand.transform.position, handCollider.size / 2, Hand.transform.rotation);
             foreach (Collider other in colliders)
@@ -178,5 +178,11 @@ public class PickUpItem : MonoBehaviour
     public string GetPickedItemType()
     {
         return pickedItemType;
+    }
+
+    // NUEVO MÉTODO para obtener el prefab que está siendo sostenido
+    public GameObject GetPickedPrefab()
+    {
+        return pickedItem; // Retorna el prefab del ítem recogido
     }
 }

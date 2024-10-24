@@ -5,47 +5,38 @@ public class PortalDeEntregas : MonoBehaviour
 {
     public OrderManager orderManager; // Referencia al script OrderManager
     public Collider jugadorCollider; // Collider del jugador
-    public Collider jugadorCollider1; // Collider del jugador
-    public List<string> itemsRequeridos; // Lista de tipos de ítems requeridos
+    public Collider jugadorCollider1; // Collider adicional del jugador
+    public List<GameObject> itemsRequeridos; // Lista de prefabs requeridos
     public float cantEntrega = 0; // Contador de entregas
 
     private void OnTriggerStay(Collider other)
     {
-        // Verificar si el objeto que está dentro del trigger es el jugador
         if (other == jugadorCollider || other == jugadorCollider1)
         {
-            // Comprobar si el jugador presiona la tecla 'E'
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Debug.Log("El jugador presionó E.");
                 PickUpItem playerPickUp = other.GetComponentInChildren<PickUpItem>();
 
-                // Verificar si el jugador sostiene un ítem y si ese ítem es uno de los requeridos
-                if (playerPickUp != null && !string.IsNullOrEmpty(playerPickUp.GetPickedItemType()))
+                if (playerPickUp != null && playerPickUp.GetPickedPrefab() != null)
                 {
-                    string tipoItemJugador = playerPickUp.GetPickedItemType();
-                    Debug.Log(tipoItemJugador);
+                    GameObject prefabJugador = playerPickUp.GetPickedPrefab();
 
-                    if (itemsRequeridos.Contains(tipoItemJugador))
+                    // Buscar si hay un pedido que coincida con el prefab del jugador
+                    OrderPrefabData pedidoCorrespondiente = BuscarPedidoPorPrefab(prefabJugador);
+
+                    if (pedidoCorrespondiente != null && orderManager.EliminarPedido(pedidoCorrespondiente.orderSprite))
                     {
-                        // El ítem es el correcto, eliminarlo del OrderManager
-                        Debug.Log("ITEM CORRECTO");
-                        Sprite pedidoSprite = BuscarPedidoSprite(tipoItemJugador);
+                        // Eliminar el prefab de las manos del jugador
+                        EliminarItemDeLasManos(other);
 
-                        if (pedidoSprite != null && orderManager.EliminarPedido(pedidoSprite))
-                        {
-                            // Eliminar el ítem del "HandPoint" del jugador
-                            EliminarItemDeLasManos(other);
-
-                            // Sumar un punto a las entregas
-                            cantEntrega += 1;
-                            Debug.Log("¡Pedido entregado! Punto sumado.");
-                        }
+                        // Sumar un punto a las entregas
+                        cantEntrega += 1;
+                        Debug.Log("¡Pedido entregado! Punto sumado.");
                     }
                     else
                     {
-                        // Si el ítem es incorrecto, eliminarlo igualmente pero sin sumar nada
-                        Debug.Log("Pedido Incorrecto, No se ha sumado nada");
+                        Debug.Log("Prefab Incorrecto, No se ha sumado nada");
                         EliminarItemDeLasManos(other);
                     }
                 }
@@ -57,7 +48,6 @@ public class PortalDeEntregas : MonoBehaviour
         }
     }
 
-    // Método para eliminar el ítem de las manos del jugador
     private void EliminarItemDeLasManos(Collider other)
     {
         Transform hand = other.transform.Find("Hand/HandPoint");
@@ -68,19 +58,31 @@ public class PortalDeEntregas : MonoBehaviour
         }
     }
 
-    // Método para buscar el Sprite correspondiente al nombre del pedido
-    public Sprite BuscarPedidoSprite(string nombrePedido)
+    private OrderPrefabData BuscarPedidoPorPrefab(GameObject prefab)
     {
-        foreach (Sprite pedido in orderManager.possibleOrders)
+        // Recorremos la lista de órdenes y comparamos el prefab con los prefabs de las órdenes activas
+        foreach (OrderPrefabData pedido in orderManager.orderPrefabList)
         {
-            if (pedido.name.Trim() == nombrePedido.Trim())
+            // Buscamos si el prefab coincide con uno en la lista
+            if (pedido.orderPrefab == prefab)
             {
-                Debug.Log("Sprite encontrado: " + pedido.name);
+                Debug.Log("Prefab encontrado y coincide con el pedido: " + pedido.orderPrefab.name);
                 return pedido;
             }
         }
 
-        Debug.Log("No se encontró un Sprite con ese nombre");
-        return null; // No se encontró un Sprite con ese nombre
+        Debug.Log("No se encontró un pedido que coincida con ese prefab.");
+        return null;
+    }
+
+    // Método para actualizar la lista de prefabs requeridos basado en las órdenes activas
+    public void ActualizarItemsRequeridos()
+    {
+        itemsRequeridos.Clear();
+        foreach (OrderPrefabData pedido in orderManager.GetActiveOrders())
+        {
+            itemsRequeridos.Add(pedido.orderPrefab);
+        }
+        Debug.Log("Items requeridos actualizados: " + string.Join(", ", itemsRequeridos));
     }
 }
