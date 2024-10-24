@@ -3,34 +3,36 @@ using UnityEngine;
 
 public class DeteccionDisparo2 : MonoBehaviour
 {
-    public Collider zonaRecarga;
+    public Collider zonaRecarga2;
     public GameObject cañon2;  // Cañón izquierdo para player 1
     public Collider p2;  // Collider del jugador 1
     public float VelLen = 1f;  // Velocidad lenta (movimiento hacia atrás)
     public float VelRap = 3f;  // Velocidad rápida (movimiento hacia adelante)
     public float TiempoCarga = 2f;  // Tiempo de carga antes de disparar
     private Vector3 dirIzquierda = Vector3.left;  // Movimiento hacia atrás para cañón izquierdo
-    private Vector3 posInicialCañon2;  // Posición inicial del cañón izquierdo
+    private Vector3 posInicialCañon;  // Posición inicial del cañón izquierdo
     public GameObject proyectil;
-    public Transform puntoDisparo2;  // Punto de salida del proyectil para cañón2
+    public Transform puntoDisparo2;  // Punto de salida del proyectil para cañón
     public float fuerzaDisparo = 20f;  // Fuerza con la que el proyectil será disparado
+    public Transform handPoint;  // Punto en la mano del jugador donde se comprueba el prefab
+    public GameObject prefabRequerido;  // Prefab que debe estar en el HandPoint
 
     private bool haDisparado = false;  // Flag para evitar múltiples disparos
     private bool enZonaRecarga = false;  // Flag para saber si el jugador está en la zona
 
     void Start()
     {
-        Debug.Log("Pos. Inicial Lista para Cañón 1");
-        posInicialCañon2 = cañon2.transform.position;
+        Debug.Log("Pos. Inicial Lista para Cañón 2");
+        posInicialCañon = cañon2.transform.position;
     }
 
     // Se detecta cuando el jugador entra en la zona de recarga
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && other == p2)  // Verificamos que sea el jugador 1
+        if (other.CompareTag("Player") && other == p2)  // Verificamos que sea el jugador 2
         {
             enZonaRecarga = true;  // El jugador está en la zona de recarga
-            Debug.Log("Player 1 ha entrado en la zona de recarga");
+            Debug.Log("Player 2 ha entrado en la zona de recarga");
         }
     }
 
@@ -40,17 +42,46 @@ public class DeteccionDisparo2 : MonoBehaviour
         if (other.CompareTag("Player") && other == p2)
         {
             enZonaRecarga = false;  // El jugador ha salido de la zona de recarga
-            Debug.Log("Player 1 ha salido de la zona de recarga");
+            Debug.Log("Player 2 ha salido de la zona de recarga");
         }
     }
 
     void Update()
     {
-        if (enZonaRecarga && Input.GetKey(KeyCode.P) && !haDisparado)
+        if (enZonaRecarga && Input.GetKey(KeyCode.P) && !haDisparado && VerificarPrefabEnManos())
         {
-            Debug.Log("Player 1 interactúa con el cañón");
-            StartCoroutine(MoverCañon(cañon2, dirIzquierda, posInicialCañon2, puntoDisparo2, Vector3.left));
+            Debug.Log("Player 2 interactúa con el cañón y tiene el prefab requerido en las manos");
+            StartCoroutine(MoverCañon(cañon2, dirIzquierda, posInicialCañon, puntoDisparo2, Vector3.right));
         }
+    }
+
+    // Verifica si el jugador tiene el prefab requerido en el HandPoint
+    bool VerificarPrefabEnManos()
+    {
+        Debug.Log("Verificando objeto en el HandPoint...");
+
+        if (handPoint.childCount > 0)  // Verifica si hay algún objeto en el handPoint
+        {
+            GameObject objetoEnManos = handPoint.GetChild(0).gameObject;  // Obtiene el objeto en las manos
+            Debug.Log("Objeto encontrado en el HandPoint: " + objetoEnManos.name);
+
+            // Comparar usando el nombre de los prefabs
+            if (objetoEnManos.name == prefabRequerido.name) // Cambiado a comparación de nombres
+            {
+                Debug.Log("El objeto en las manos es el prefab requerido: " + prefabRequerido.name);
+                return true;
+            }
+            else
+            {
+                Debug.LogWarning("El objeto en las manos NO es el prefab requerido. Se encontró: " + objetoEnManos.name + " pero se esperaba: " + prefabRequerido.name);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró ningún objeto en el HandPoint.");
+        }
+
+        return false;
     }
 
     IEnumerator MoverCañon(GameObject cañon, Vector3 direccion, Vector3 posInicial, Transform puntoDisparo, Vector3 direccionDisparo)
@@ -98,7 +129,13 @@ public class DeteccionDisparo2 : MonoBehaviour
 
         if (rb != null)
         {
-            rb.AddForce(-direccionDisparo * fuerzaDisparo, ForceMode.Impulse);
+            rb.AddForce(direccionDisparo * fuerzaDisparo, ForceMode.Impulse);
+        }
+
+        if (handPoint.childCount > 0)
+        {
+            Destroy(handPoint.GetChild(0).gameObject);  // Elimina el objeto en las manos
+            Debug.Log("Prefab requerido eliminado de las manos del jugador.");
         }
     }
 }

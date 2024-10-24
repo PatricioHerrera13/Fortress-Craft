@@ -94,11 +94,21 @@ public class PortalDeEntregas : MonoBehaviour
 
     private OrderPrefabData FindOrderData(GameObject prefab)
     {
-        // Buscar en los items requeridos si el prefab entregado corresponde a uno de los pedidos
+        // Obtener el SpriteRenderer del prefab entregado
+        SpriteRenderer spriteRenderer = prefab.GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+        {
+            Debug.Log("El prefab entregado no tiene un SpriteRenderer.");
+            return null; // Retorna null si no hay un SpriteRenderer
+        }
+
+        Sprite objetoSprite = spriteRenderer.sprite; // Obtener el sprite del objeto del prefab
+
+        // Buscar en los items requeridos si el sprite del objeto corresponde a uno de los pedidos
         foreach (OrderPrefabData order in itemsRequeridos)
         {
-            // Compara los nombres de los prefabs en lugar de las referencias directas
-            if (order.orderPrefab.name == prefab.name)
+            // Compara con el sprite del objeto en el prefab
+            if (order.objectSprite == objetoSprite)
             {
                 return order; // Retorna el pedido si se encuentra una coincidencia
             }
