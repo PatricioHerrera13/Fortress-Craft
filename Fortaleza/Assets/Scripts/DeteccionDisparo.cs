@@ -12,8 +12,10 @@ public class DeteccionDisparo : MonoBehaviour
     private Vector3 dirIzquierda = Vector3.right;  // Movimiento hacia atrás para cañón izquierdo
     private Vector3 posInicialCañon;  // Posición inicial del cañón izquierdo
     public GameObject proyectil;
-    public Transform puntoDisparo1;  // Punto de salida del proyectil para cañón2
+    public Transform puntoDisparo1;  // Punto de salida del proyectil para cañón
     public float fuerzaDisparo = 20f;  // Fuerza con la que el proyectil será disparado
+    public Transform handPoint;  // Punto en la mano del jugador donde se comprueba el prefab
+    public GameObject prefabRequerido;  // Prefab que debe estar en el HandPoint
 
     private bool haDisparado = false;  // Flag para evitar múltiples disparos
     private bool enZonaRecarga = false;  // Flag para saber si el jugador está en la zona
@@ -46,11 +48,40 @@ public class DeteccionDisparo : MonoBehaviour
 
     void Update()
     {
-        if (enZonaRecarga && Input.GetKey(KeyCode.O) && !haDisparado)
+        if (enZonaRecarga && Input.GetKey(KeyCode.E) && !haDisparado && VerificarPrefabEnManos())
         {
-            Debug.Log("Player 1 interactúa con el cañón");
+            Debug.Log("Player 1 interactúa con el cañón y tiene el prefab requerido en las manos");
             StartCoroutine(MoverCañon(cañon1, dirIzquierda, posInicialCañon, puntoDisparo1, Vector3.left));
         }
+    }
+
+    // Verifica si el jugador tiene el prefab requerido en el HandPoint
+    bool VerificarPrefabEnManos()
+    {
+        Debug.Log("Verificando objeto en el HandPoint...");
+
+        if (handPoint.childCount > 0)  // Verifica si hay algún objeto en el handPoint
+        {
+            GameObject objetoEnManos = handPoint.GetChild(0).gameObject;  // Obtiene el objeto en las manos
+            Debug.Log("Objeto encontrado en el HandPoint: " + objetoEnManos.name);
+
+            // Comparar usando el nombre de los prefabs
+            if (objetoEnManos.name == prefabRequerido.name) // Cambiado a comparación de nombres
+            {
+                Debug.Log("El objeto en las manos es el prefab requerido: " + prefabRequerido.name);
+                return true;
+            }
+            else
+            {
+                Debug.LogWarning("El objeto en las manos NO es el prefab requerido. Se encontró: " + objetoEnManos.name + " pero se esperaba: " + prefabRequerido.name);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró ningún objeto en el HandPoint.");
+        }
+
+        return false;
     }
 
     IEnumerator MoverCañon(GameObject cañon, Vector3 direccion, Vector3 posInicial, Transform puntoDisparo, Vector3 direccionDisparo)
@@ -99,6 +130,12 @@ public class DeteccionDisparo : MonoBehaviour
         if (rb != null)
         {
             rb.AddForce(direccionDisparo * fuerzaDisparo, ForceMode.Impulse);
+        }
+
+        if (handPoint.childCount > 0)
+        {
+            Destroy(handPoint.GetChild(0).gameObject);  // Elimina el objeto en las manos
+            Debug.Log("Prefab requerido eliminado de las manos del jugador.");
         }
     }
 }
