@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class OrderManager : MonoBehaviour
 {
@@ -11,11 +12,16 @@ public class OrderManager : MonoBehaviour
     public float orderInterval = 6f; // Tiempo en segundos entre la aparición de cada pedido
     private List<Image> activeOrders = new List<Image>(); // Lista de imágenes que ya están activas
     public List<OrderPrefabData> orderPrefabList; // Lista que vincula sprites de pedidos con prefabs
+    public Button back;
 
     private void Start()
     {
         StartCoroutine(GenerateOrders());
+        back.onClick.AddListener(atras);
     }
+    
+
+    
 
     private IEnumerator GenerateOrders()
     {
@@ -117,5 +123,10 @@ public class OrderManager : MonoBehaviour
 
         Debug.Log("Órdenes activas devueltas: " + activeOrdersList.Count); // Depuración
         return activeOrdersList;
+    }
+
+    void atras()
+    {
+        SceneManager.LoadScene("MENU");
     }
 }
