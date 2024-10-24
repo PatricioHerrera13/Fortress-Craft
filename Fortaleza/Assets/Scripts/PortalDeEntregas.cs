@@ -6,38 +6,56 @@ public class PortalDeEntregas : MonoBehaviour
     public OrderManager orderManager; // Referencia al script OrderManager
     public Collider jugadorCollider; // Collider del jugador
     public Collider jugadorCollider1; // Collider adicional del jugador
-    public List<GameObject> itemsRequeridos; // Lista de prefabs requeridos
+    public List<OrderPrefabData> itemsRequeridos; // Lista de datos de pedidos requeridos
     public float cantEntrega = 0; // Contador de entregas
+
+    private bool jugadorDentro = false; // Variable que indica si el jugador está dentro del área
 
     private void OnTriggerStay(Collider other)
     {
         if (other == jugadorCollider || other == jugadorCollider1)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            jugadorDentro = true; // El jugador está dentro del área
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other == jugadorCollider || other == jugadorCollider1)
+        {
+            jugadorDentro = false; // El jugador ha salido del área
+        }
+    }
+
+    private void Update()
+    {
+        if (jugadorDentro && Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("El jugador presionó E dentro del área.");
+            Collider playerCollider = jugadorCollider != null ? jugadorCollider : jugadorCollider1;
+
+            if (playerCollider != null)
             {
-                Debug.Log("El jugador presionó E.");
-                PickUpItem playerPickUp = other.GetComponentInChildren<PickUpItem>();
+                PickUpItem playerPickUp = playerCollider.GetComponentInChildren<PickUpItem>();
 
                 if (playerPickUp != null && playerPickUp.GetPickedPrefab() != null)
                 {
                     GameObject prefabJugador = playerPickUp.GetPickedPrefab();
+                    OrderPrefabData orderData = FindOrderData(prefabJugador); // Buscar el pedido relacionado
 
-                    // Buscar si hay un pedido que coincida con el prefab del jugador
-                    OrderPrefabData pedidoCorrespondiente = BuscarPedidoPorPrefab(prefabJugador);
-
-                    if (pedidoCorrespondiente != null && orderManager.EliminarPedido(pedidoCorrespondiente.orderSprite))
+                    if (orderData != null &&
+                        orderManager.EliminarPedido(orderData.orderSprite))
                     {
                         // Eliminar el prefab de las manos del jugador
-                        EliminarItemDeLasManos(other);
-
+                        EliminarItemDeLasManos(playerCollider);
                         // Sumar un punto a las entregas
                         cantEntrega += 1;
                         Debug.Log("¡Pedido entregado! Punto sumado.");
                     }
                     else
                     {
-                        Debug.Log("Prefab Incorrecto, No se ha sumado nada");
-                        EliminarItemDeLasManos(other);
+                        Debug.Log("Entrega errónea. No se ha sumado nada.");
+                        EliminarItemDeLasManos(playerCollider); // De todas formas elimina el ítem
                     }
                 }
                 else
@@ -58,31 +76,33 @@ public class PortalDeEntregas : MonoBehaviour
         }
     }
 
-    private OrderPrefabData BuscarPedidoPorPrefab(GameObject prefab)
-    {
-        // Recorremos la lista de órdenes y comparamos el prefab con los prefabs de las órdenes activas
-        foreach (OrderPrefabData pedido in orderManager.orderPrefabList)
-        {
-            // Buscamos si el prefab coincide con uno en la lista
-            if (pedido.orderPrefab == prefab)
-            {
-                Debug.Log("Prefab encontrado y coincide con el pedido: " + pedido.orderPrefab.name);
-                return pedido;
-            }
-        }
-
-        Debug.Log("No se encontró un pedido que coincida con ese prefab.");
-        return null;
-    }
-
-    // Método para actualizar la lista de prefabs requeridos basado en las órdenes activas
     public void ActualizarItemsRequeridos()
     {
-        itemsRequeridos.Clear();
-        foreach (OrderPrefabData pedido in orderManager.GetActiveOrders())
+        itemsRequeridos.Clear(); // Limpiar la lista antes de actualizar
+        var activeOrders = orderManager.GetActiveOrders(); // Obtener las órdenes activas
+
+        Debug.Log("Total de órdenes activas: " + activeOrders.Count); // Verificar cuántas órdenes activas hay
+
+        foreach (OrderPrefabData pedido in activeOrders)
         {
-            itemsRequeridos.Add(pedido.orderPrefab);
+            itemsRequeridos.Add(pedido); // Agregar el pedido completo (datos del sprite, prefab, etc.)
+            Debug.Log("Item requerido agregado: " + pedido.orderPrefab.name); // Depuración
         }
-        Debug.Log("Items requeridos actualizados: " + string.Join(", ", itemsRequeridos));
+
+        Debug.Log("Items requeridos actualizados.");
+    }
+
+    private OrderPrefabData FindOrderData(GameObject prefab)
+    {
+        // Buscar en los items requeridos si el prefab entregado corresponde a uno de los pedidos
+        foreach (OrderPrefabData order in itemsRequeridos)
+        {
+            // Compara los nombres de los prefabs en lugar de las referencias directas
+            if (order.orderPrefab.name == prefab.name)
+            {
+                return order; // Retorna el pedido si se encuentra una coincidencia
+            }
+        }
+        return null; // Si no se encuentra, retorna null
     }
 }
