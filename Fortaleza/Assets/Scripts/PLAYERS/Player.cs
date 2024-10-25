@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     private float dashCooldownTimer = 0f;
     private Vector3 lastMovementDirection; // Guardar la última dirección de movimiento
 
+    public float billetera = 0;
+
     public Transform hand; // Referencia al objeto Hand
     public float handOffsetDistance = 1f; // Distancia de la mano desde el jugador
 
