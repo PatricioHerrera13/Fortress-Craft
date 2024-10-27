@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Bow
   prefab: {fileID: 1569096099578481407, guid: 7d0186eab8b1c0042851c404f6420057, type: 3}
+  valor: 50

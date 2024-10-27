@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Sword
   prefab: {fileID: 4999509791375213757, guid: 24a58df10ddf27347bab73bf37f973b0, type: 3}
+  valor: 70

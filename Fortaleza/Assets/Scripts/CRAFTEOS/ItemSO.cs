@@ -6,4 +6,5 @@ using UnityEngine;
 public class ItemSO : ScriptableObject {
     public string itemName; // Nombre del ítem
     public GameObject prefab; // Prefab del ítem
+    public float valor;
 }

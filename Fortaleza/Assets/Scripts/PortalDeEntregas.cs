@@ -8,6 +8,7 @@ public class PortalDeEntregas : MonoBehaviour
     public Collider jugadorCollider1; // Collider adicional del jugador
     public List<OrderPrefabData> itemsRequeridos; // Lista de datos de pedidos requeridos
     public float cantEntrega = 0; // Contador de entregas
+    public Player player1;
 
     private bool jugadorDentro = false; // Variable que indica si el jugador está dentro del área
 
@@ -41,21 +42,41 @@ public class PortalDeEntregas : MonoBehaviour
                 if (playerPickUp != null && playerPickUp.GetPickedPrefab() != null)
                 {
                     GameObject prefabJugador = playerPickUp.GetPickedPrefab();
-                    OrderPrefabData orderData = FindOrderData(prefabJugador); // Buscar el pedido relacionado
+                    ItemSOHolder itemSOHolder = prefabJugador.GetComponent<ItemSOHolder>(); // Obtener el ItemSOHolder
 
-                    if (orderData != null &&
-                        orderManager.EliminarPedido(orderData.orderSprite))
+                    if (itemSOHolder != null)
                     {
-                        // Eliminar el prefab de las manos del jugador
-                        EliminarItemDeLasManos(playerCollider);
-                        // Sumar un punto a las entregas
-                        cantEntrega += 1;
-                        Debug.Log("¡Pedido entregado! Punto sumado.");
+                        ItemSO itemSO = itemSOHolder.itemSO; // Obtener el ScriptableObject ItemSO desde el ItemSOHolder
+
+                        if (itemSO != null)
+                        {
+                            OrderPrefabData orderData = FindOrderData(prefabJugador); // Buscar el pedido relacionado
+
+                            if (orderData != null &&
+                                orderManager.EliminarPedido(orderData.orderSprite))
+                            {
+                                // Eliminar el prefab de las manos del jugador
+                                EliminarItemDeLasManos(playerCollider);
+
+                                // Sumar dinero del valor del ItemSO
+                                player1.wallet.AddMoney(itemSO.valor); // Sumar el valor del ItemSO a la billetera
+                                cantEntrega += 1;
+                                Debug.Log("¡Pedido entregado! Punto sumado y dinero añadido: " + itemSO.valor);
+                            }
+                            else
+                            {
+                                Debug.Log("Entrega errónea. No se ha sumado nada.");
+                                EliminarItemDeLasManos(playerCollider); // De todas formas elimina el ítem
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("No se encontró un ItemSO en el ItemSOHolder.");
+                        }
                     }
                     else
                     {
-                        Debug.Log("Entrega errónea. No se ha sumado nada.");
-                        EliminarItemDeLasManos(playerCollider); // De todas formas elimina el ítem
+                        Debug.Log("El prefab no tiene un ItemSOHolder.");
                     }
                 }
                 else
