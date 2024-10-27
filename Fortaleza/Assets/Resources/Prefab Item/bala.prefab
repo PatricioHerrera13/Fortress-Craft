@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4596562240115516368}
   - component: {fileID: 2004338470289166843}
   - component: {fileID: 9011901092782093960}
+  - component: {fileID: 2809911955741913753}
   m_Layer: 0
   m_Name: bala
   m_TagString: Item
@@ -143,3 +144,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: municion
+--- !u!114 &2809911955741913753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4596562240115516369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecdb9d66d5562745bdcff438e184d53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sprite: {fileID: -3803466081661082397, guid: 20d6cce5c7ac33b4e97f0f98a09aa347, type: 3}

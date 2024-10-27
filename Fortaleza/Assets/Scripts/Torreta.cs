@@ -1,64 +1,131 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class Torreta : MonoBehaviour
 {
-    public GameObject prefabRequerido; // Prefab que activa la torreta
-    public Sprite spriteEsperado; // Sprite del prefab que se debe verificar
-    public Transform puntoDisparo; // Punto desde donde dispara la torreta
-    public GameObject proyectilPrefab; // Prefab del proyectil (invisible)
-    public float intervaloDisparo = 1f;
-    public float tiempoEsperaParaActivar = 0.5f; // Tiempo para dar oportunidad al jugador de activar
-    private bool playerEnZona = false;
-    public Player player; // Referencia al player en la zona
-    private bool disparando = false; // Estado de disparo
+    public Collider zonaRecarga;
+    public Collider jugadorCollider;  // Collider del jugador
+    public float tiempoCarga = 2f;  // Tiempo de carga antes de disparar
+    public GameObject proyectil;  // Prefab del proyectil
+    public Transform puntoDisparo;  // Punto de salida del proyectil
+    public float fuerzaDisparo = 20f;  // Fuerza con la que el proyectil será disparado
+    public Transform handPoint;  // Punto en la mano del jugador donde se comprueba el prefab
+    public GameObject prefabRequerido;  // Prefab que debe estar en el HandPoint
 
-    private void OnTriggerEnter(Collider other)
+    private bool haDisparado = false;  // Flag para evitar múltiples disparos
+    private bool enZonaRecarga = false;  // Flag para saber si el jugador está en la zona
+
+    public SpriteRenderer spriteRenderer;
+
+    void Start()
     {
-        Debug.Log(player);
-        player = other.GetComponent<Player>();
-        if (player != null && player.TienePrefab(prefabRequerido))
+        Debug.Log("Torreta lista para disparar.");
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    // Se detecta cuando el jugador entra en la zona de recarga
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") && other == jugadorCollider)
         {
-            StartCoroutine(EsperarYVerificarSprite());
+            enZonaRecarga = true;  // El jugador está en la zona de recarga
+            Debug.Log("Jugador ha entrado en la zona de recarga.");
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    // Se detecta cuando el jugador sale de la zona de recarga
+    void OnTriggerExit(Collider other)
     {
-        Debug.Log(player);
-        Player salirPlayer = other.GetComponent<Player>();
-        if (salirPlayer != null && salirPlayer == player)
+        if (other.CompareTag("Player") && other == jugadorCollider)
         {
-            playerEnZona = false;
-            CancelInvoke("Disparar");
-            disparando = false; // Resetea el estado de disparo al salir de la zona
-            StopAllCoroutines(); // Detiene la espera si sale de la zona
+            enZonaRecarga = false;  // El jugador ha salido de la zona de recarga
+            Debug.Log("Jugador ha salido de la zona de recarga.");
         }
     }
 
-    private void Update()
+    void Update()
     {
-        // Verifica si el jugador está en la zona, presiona la tecla C y aún no está disparando
-        if (playerEnZona && Input.GetKeyDown(KeyCode.C) && !disparando)
+        if (enZonaRecarga && Input.GetKey(KeyCode.E) && !haDisparado && VerificarPrefabEnManos())
         {
-            disparando = true; // Evita que se active más de una vez
-            InvokeRepeating("Disparar", 0f, intervaloDisparo);
+            Debug.Log("Jugador interactúa con la torreta y tiene el prefab requerido en las manos.");
+            StartCoroutine(Disparar());
         }
     }
 
-    private IEnumerator EsperarYVerificarSprite()
+    // Verifica si el jugador tiene el prefab requerido en el HandPoint
+    bool VerificarPrefabEnManos()
     {
-        yield return new WaitForSeconds(tiempoEsperaParaActivar); // Espera un tiempo antes de activar
-        if (player != null && player.TienePrefab(prefabRequerido) && player.TienePrefabConSprite(spriteEsperado))
+        if (handPoint.childCount > 0)
         {
-            playerEnZona = true; // Activa solo si el sprite del prefab es correcto
+            GameObject objetoEnManos = handPoint.GetChild(0).gameObject;
+
+            // Obtener el sprite del objeto en manos
+            PrefabSprite spriteEnManos = objetoEnManos.GetComponent<PrefabSprite>();
+            PrefabSprite spriteRequerido = prefabRequerido.GetComponent<PrefabSprite>();
+
+            if (spriteEnManos != null && spriteRequerido != null)
+            {
+                // Comparar los sprites
+                if (spriteEnManos.sprite == spriteRequerido.sprite)
+                {
+                    Debug.Log("El sprite en las manos coincide con el prefab requerido.");
+                    return true;
+                }
+                else
+                {
+                    Debug.LogWarning("Los sprites NO coinciden. Sprite en manos: " + spriteEnManos.sprite.name + ", Sprite requerido: " + spriteRequerido.sprite.name);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("No se encontró el componente PrefabSprite en uno de los objetos.");
+            }
         }
+        else
+        {
+            Debug.LogWarning("No hay objetos en el HandPoint.");
+        }
+        return false;
     }
 
-    void Disparar()
+    IEnumerator Disparar()
     {
-        GameObject proyectil = Instantiate(proyectilPrefab, puntoDisparo.position, Quaternion.identity);
-        proyectil.GetComponent<Rigidbody>().velocity = transform.forward * 10f; // Velocidad en Z
-        proyectil.SetActive(false); // Mantén el proyectil invisible
+        haDisparado = true;  // Evitar múltiples disparos
+
+        for (int i = 0; i < 3; i++)  // Número de disparos (cambiar si es necesario)
+        {
+            Debug.Log("Disparando proyectil...");
+            GameObject proyectilInstanciado = Instantiate(proyectil, puntoDisparo.position, puntoDisparo.rotation);
+
+            // Hacer el proyectil invisible
+            SpriteRenderer renderer = proyectilInstanciado.GetComponent<SpriteRenderer>();
+            if (renderer != null)
+            {
+                renderer.enabled = false;  // Desactiva el SpriteRenderer
+            }
+
+            // Asegúrate de que el collider esté activo
+            Collider collider = proyectilInstanciado.GetComponent<Collider>();
+            if (collider != null)
+            {
+                collider.enabled = true;  // Asegúrate de que el collider esté activo
+            }
+
+            Rigidbody rb = proyectilInstanciado.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.AddForce(Vector3.forward * fuerzaDisparo, ForceMode.Impulse);  // Ajustar la dirección según sea necesario
+            }
+
+            if (handPoint.childCount > 0)
+            {
+                Destroy(handPoint.GetChild(0).gameObject);  // Elimina el objeto en las manos
+                Debug.Log("Prefab requerido eliminado de las manos del jugador.");
+            }
+
+            yield return new WaitForSeconds(tiempoCarga);  // Esperar el tiempo de carga antes del siguiente disparo
+        }
+
+        haDisparado = false;  // Permitir que la torreta vuelva a disparar
     }
 }

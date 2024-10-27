@@ -147,7 +147,10 @@ MonoBehaviour:
   dashSpeed: 50
   dashDuration: 0.2
   dashCooldown: 1
+  moneyText: {fileID: 0}
   hand: {fileID: 4387836952785672695}
+  handpoint: {fileID: 4387836951737025859}
+  handOffsetDistance: 1
 --- !u!1 &4387836951737025858
 GameObject:
   m_ObjectHideFlags: 0

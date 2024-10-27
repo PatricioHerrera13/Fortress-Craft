@@ -32,7 +32,7 @@ public class PortalDeEntregas : MonoBehaviour
     {
         if (jugadorDentro && Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("El jugador presionó E dentro del área.");
+            //Debug.Log("El jugador presionó E dentro del área.");
             Collider playerCollider = jugadorCollider != null ? jugadorCollider : jugadorCollider1;
 
             if (playerCollider != null)
@@ -61,27 +61,27 @@ public class PortalDeEntregas : MonoBehaviour
                                 // Sumar dinero del valor del ItemSO
                                 player1.wallet.AddMoney(itemSO.valor); // Sumar el valor del ItemSO a la billetera
                                 cantEntrega += 1;
-                                Debug.Log("¡Pedido entregado! Punto sumado y dinero añadido: " + itemSO.valor);
+                                //Debug.Log("¡Pedido entregado! Punto sumado y dinero añadido: " + itemSO.valor);
                             }
                             else
                             {
-                                Debug.Log("Entrega errónea. No se ha sumado nada.");
+                                //Debug.Log("Entrega errónea. No se ha sumado nada.");
                                 EliminarItemDeLasManos(playerCollider); // De todas formas elimina el ítem
                             }
                         }
                         else
                         {
-                            Debug.Log("No se encontró un ItemSO en el ItemSOHolder.");
+                            //Debug.Log("No se encontró un ItemSO en el ItemSOHolder.");
                         }
                     }
                     else
                     {
-                        Debug.Log("El prefab no tiene un ItemSOHolder.");
+                        //Debug.Log("El prefab no tiene un ItemSOHolder.");
                     }
                 }
                 else
                 {
-                    Debug.Log("El jugador no sostiene ningún ítem.");
+                    //Debug.Log("El jugador no sostiene ningún ítem.");
                 }
             }
         }
@@ -93,7 +93,7 @@ public class PortalDeEntregas : MonoBehaviour
         if (hand != null && hand.childCount > 0)
         {
             Destroy(hand.GetChild(0).gameObject);
-            Debug.Log("El objeto ha sido eliminado del jugador.");
+            //Debug.Log("El objeto ha sido eliminado del jugador.");
         }
     }
 
@@ -102,15 +102,15 @@ public class PortalDeEntregas : MonoBehaviour
         itemsRequeridos.Clear(); // Limpiar la lista antes de actualizar
         var activeOrders = orderManager.GetActiveOrders(); // Obtener las órdenes activas
 
-        Debug.Log("Total de órdenes activas: " + activeOrders.Count); // Verificar cuántas órdenes activas hay
+        //Debug.Log("Total de órdenes activas: " + activeOrders.Count); // Verificar cuántas órdenes activas hay
 
         foreach (OrderPrefabData pedido in activeOrders)
         {
             itemsRequeridos.Add(pedido); // Agregar el pedido completo (datos del sprite, prefab, etc.)
-            Debug.Log("Item requerido agregado: " + pedido.orderPrefab.name); // Depuración
+            //Debug.Log("Item requerido agregado: " + pedido.orderPrefab.name); // Depuración
         }
 
-        Debug.Log("Items requeridos actualizados.");
+        //Debug.Log("Items requeridos actualizados.");
     }
 
     private OrderPrefabData FindOrderData(GameObject prefab)
@@ -119,7 +119,7 @@ public class PortalDeEntregas : MonoBehaviour
         SpriteRenderer spriteRenderer = prefab.GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
-            Debug.Log("El prefab entregado no tiene un SpriteRenderer.");
+            //Debug.Log("El prefab entregado no tiene un SpriteRenderer.");
             return null; // Retorna null si no hay un SpriteRenderer
         }
 

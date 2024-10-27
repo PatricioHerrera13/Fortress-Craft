@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     public Text moneyText;
 
     public Transform hand; // Referencia al objeto Hand
+    public Transform handpoint;
     public float handOffsetDistance = 1f; // Distancia de la mano desde el jugador
 
     private void Awake()
@@ -103,32 +104,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public bool TienePrefabConSprite(Sprite spriteEsperado)
-    {
-        if (hand.childCount > 0)
-        {
-            SpriteRenderer objetoEnMano = hand.GetChild(0).GetComponent<SpriteRenderer>();
-            if (objetoEnMano != null && objetoEnMano.sprite == spriteEsperado)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool TienePrefab(GameObject prefabRequerido)
-    {
-        if (hand.childCount > 0)
-        {
-            GameObject objetoEnMano = hand.GetChild(0).gameObject;
-            if (objetoEnMano == prefabRequerido)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private IEnumerator Dash(Vector3 direction)
     {
         isDashing = true;
@@ -143,5 +118,49 @@ public class Player : MonoBehaviour
 
         // Reiniciar el cooldown
         dashCooldownTimer = dashCooldown;
+    }
+
+    public bool TienePrefabConSprite(Sprite spriteEsperado)
+    {
+        if (handpoint.childCount > 0)
+        {
+            SpriteRenderer objetoEnMano = handpoint.GetChild(0).GetComponent<SpriteRenderer>();
+            if (objetoEnMano != null && objetoEnMano.sprite == spriteEsperado)
+            {
+                Debug.Log("El sprite del objeto en handpoint coincide con el sprite esperado.");
+                return true;
+            }
+            Debug.Log("El sprite no coincide.");
+        }
+        Debug.Log("No hay objeto en handpoint para comparar el sprite.");
+        return false;
+    }
+
+    public bool TienePrefab(GameObject prefabRequerido)
+    {
+        if (handpoint.childCount > 0)
+        {
+            GameObject objetoEnMano = handpoint.GetChild(0).gameObject;
+            if (objetoEnMano == prefabRequerido)
+            {
+                Debug.Log("El prefab en handpoint coincide con el prefab requerido.");
+                return true;
+            }
+        }
+        Debug.Log("No hay objeto en handpoint o no coincide con el prefab requerido.");
+        return false;
+    }
+
+    public void RemoverPrefabDelHandPoint()
+    {
+        if (handpoint.childCount > 0)
+        {
+            Debug.Log("Prefab removido del handpoint.");
+            Destroy(handpoint.GetChild(0).gameObject);
+        }
+        else
+        {
+            Debug.Log("No hay ningún prefab en el handpoint para remover.");
+        }
     }
 }
