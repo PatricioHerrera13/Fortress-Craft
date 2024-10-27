@@ -6,7 +6,7 @@ public class PickUpItem : MonoBehaviour
 {
     public GameObject Hand; // Referencia al objeto Hand
     private GameObject pickedItem = null; // El ítem que se está sosteniendo
-
+    //
     public string pickedItemType = ""; // Tipo de ítem que se está sosteniendo
     public float throwForce = 15f;
     public float throwAngle = 45f;
