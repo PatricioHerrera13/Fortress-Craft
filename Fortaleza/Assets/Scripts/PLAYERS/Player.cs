@@ -103,6 +103,32 @@ public class Player : MonoBehaviour
         }
     }
 
+    public bool TienePrefabConSprite(Sprite spriteEsperado)
+    {
+        if (hand.childCount > 0)
+        {
+            SpriteRenderer objetoEnMano = hand.GetChild(0).GetComponent<SpriteRenderer>();
+            if (objetoEnMano != null && objetoEnMano.sprite == spriteEsperado)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool TienePrefab(GameObject prefabRequerido)
+    {
+        if (hand.childCount > 0)
+        {
+            GameObject objetoEnMano = hand.GetChild(0).gameObject;
+            if (objetoEnMano == prefabRequerido)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private IEnumerator Dash(Vector3 direction)
     {
         isDashing = true;
