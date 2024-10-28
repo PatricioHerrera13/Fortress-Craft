@@ -11,7 +11,7 @@ public class Basurero : MonoBehaviour
         // Verificar si el objeto que está dentro del trigger es el jugador
         if (other == jugadorCollider || other == jugadorCollider1)
         {
-            // Comprobar si el jugador presiona la tecla 'E'
+            // Comprobar si el jugador presiona la tecla 'E'.
             if (Input.GetKeyDown(KeyCode.E))
             {
                 Debug.Log("El jugador presionó E.");
