@@ -169,6 +169,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2131476022}
     m_Modifications:
+    - target: {fileID: 5494973352529803647, guid: 9bfcd76060c693043a65030325b1c596, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5494973352529803647, guid: 9bfcd76060c693043a65030325b1c596, type: 3}
+      propertyPath: m_Center.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5494973352865577780, guid: 9bfcd76060c693043a65030325b1c596, type: 3}
       propertyPath: m_SizeDelta.x
       value: 1
@@ -2190,9 +2198,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1056090183462809426, guid: 0e7b4d58c45f8e14985ed6e0b1ab59e2, type: 3}
+      propertyPath: speed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2004333357185563554, guid: 0e7b4d58c45f8e14985ed6e0b1ab59e2, type: 3}
       propertyPath: m_Name
       value: Player2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8661968227334472731, guid: 0e7b4d58c45f8e14985ed6e0b1ab59e2, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8661968227334472731, guid: 0e7b4d58c45f8e14985ed6e0b1ab59e2, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8661968227334472731, guid: 0e7b4d58c45f8e14985ed6e0b1ab59e2, type: 3}
+      propertyPath: m_Size.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8661968227334472731, guid: 0e7b4d58c45f8e14985ed6e0b1ab59e2, type: 3}
+      propertyPath: m_Center.z
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e7b4d58c45f8e14985ed6e0b1ab59e2, type: 3}
@@ -4434,6 +4462,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 591284402689408528, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 591284403360236502, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
+      propertyPath: speed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 591284403360236503, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -4481,6 +4517,30 @@ PrefabInstance:
     - target: {fileID: 591284403360236505, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 591284403503030948, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 591284403503030955, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 591284403503030955, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 591284403503030955, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
+      propertyPath: m_Size.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 591284403503030955, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 591284403503030955, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
+      propertyPath: m_Center.z
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4b38f65b41f9104183512a728315c4c, type: 3}
@@ -4761,11 +4821,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anchorPointCount: 0
-  anchorDistance: 1
+  anchorDistance: 2
   detectionCollider: {fileID: 1061885672}
   anchorPositions:
-  - {x: -0.5, y: 0.7, z: -0.1}
-  - {x: 0.5, y: 0.7, z: -0.1}
+  - {x: -0.5, y: 1.5, z: -0.1}
+  - {x: 0.5, y: 1.5, z: -0.1}
 --- !u!23 &1061885678
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6115,7 +6175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anchorPointCount: 0
-  anchorDistance: 1
+  anchorDistance: 2
   detectionCollider: {fileID: 1400198581}
   anchorPositions:
   - {x: -0.5, y: 0.7, z: -0.1}

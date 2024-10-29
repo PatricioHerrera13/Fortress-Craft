@@ -93,6 +93,16 @@ public class PickUpItem : MonoBehaviour
         {
             if (other.CompareTag("Item"))
             {
+                AnchorPointManager anchorManager = FindObjectOfType<AnchorPointManager>();
+                if (anchorManager != null)
+                {
+                    // Verifica si el ítem está anclado
+                    if (other.transform.parent != null)
+                    {
+                        anchorManager.ReleaseItem(other.gameObject); // Liberar el ítem del anclaje
+                    }
+                }
+
                 Item itemComponent = other.GetComponent<Item>();
                 if (itemComponent != null)
                 {

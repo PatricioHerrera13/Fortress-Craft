@@ -35,6 +35,7 @@ public class AnchorPointManager : MonoBehaviour
     private void Update()
     {
         CheckForAnchoringItems();
+        UpdateAnchorOccupancy();
     }
 
     private void CheckForAnchoringItems()
@@ -63,6 +64,15 @@ public class AnchorPointManager : MonoBehaviour
         }
     }
 
+    private void UpdateAnchorOccupancy()
+    {
+        for (int i = 0; i < anchorPoints.Count; i++)
+        {
+            // Si el punto de anclaje tiene un hijo (ítem anclado), marcar como ocupado
+            anchorOccupied[i] = anchorPoints[i].childCount > 0;
+        }
+    }
+
     private void AnchorItem(GameObject item, Transform anchor)
     {
         item.transform.SetParent(anchor);
@@ -77,7 +87,8 @@ public class AnchorPointManager : MonoBehaviour
 
     public void ReleaseItem(GameObject item)
     {
-        if (item.transform.parent != null)
+        Transform parentTransform = item.transform.parent;
+        if (parentTransform != null && anchorPoints.Contains(parentTransform))
         {
             item.transform.SetParent(null); // Desancla el ítem
             Rigidbody itemRb = item.GetComponent<Rigidbody>();
@@ -85,13 +96,10 @@ public class AnchorPointManager : MonoBehaviour
             itemRb.useGravity = true; // Activar gravedad
 
             // Liberar el punto de anclaje correspondiente
-            for (int i = 0; i < anchorPoints.Count; i++)
+            int anchorIndex = anchorPoints.IndexOf(parentTransform);
+            if (anchorIndex != -1)
             {
-                if (item.transform.parent == anchorPoints[i])
-                {
-                    anchorOccupied[i] = false; // Marcar como disponible
-                    break;
-                }
+                anchorOccupied[anchorIndex] = false; // Marcar como disponible
             }
         }
     }

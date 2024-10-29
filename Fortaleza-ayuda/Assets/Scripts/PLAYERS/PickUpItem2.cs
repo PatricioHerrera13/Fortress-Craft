@@ -93,6 +93,16 @@ public class PickUpItem2 : MonoBehaviour
         {
             if (other.CompareTag("Item"))
             {
+                AnchorPointManager anchorManager = FindObjectOfType<AnchorPointManager>();
+                if (anchorManager != null)
+                {
+                    // Verifica si el ítem está anclado
+                    if (other.transform.parent != null)
+                    {
+                        anchorManager.ReleaseItem(other.gameObject); // Liberar el ítem del anclaje
+                    }
+                }
+
                 Item itemComponent = other.GetComponent<Item>();
                 if (itemComponent != null)
                 {
@@ -146,7 +156,7 @@ public class PickUpItem2 : MonoBehaviour
 
     private void TryInteractWithDispenser()
     {
-        if (Input.GetKeyDown(KeyCode.O) && pickedItem == null && handCollider != null) // Verifica si se presiona 'O'
+        if (Input.GetKeyDown(KeyCode.O) && pickedItem == null && handCollider != null)
         {
             Collider[] colliders = Physics.OverlapBox(Hand.transform.position, handCollider.size / 2, Hand.transform.rotation);
             foreach (Collider other in colliders)

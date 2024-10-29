@@ -174,11 +174,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2897e3eb83a38a342a829845f0f88236, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 5
   dashSpeed: 50
   dashDuration: 0.2
   dashCooldown: 1
+  moneyText: {fileID: 0}
   hand: {fileID: 591284403503030948}
+  handpoint: {fileID: 0}
   handOffsetDistance: 1.5
 --- !u!1 &591284403503030949
 GameObject:
